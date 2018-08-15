@@ -13,7 +13,7 @@ const (
 
 	KubeClient = "kubernetes-client"
 	ResClient  = "resource-client"
-	PermClient = "resource-client"
+	PermClient = "perm-client"
 )
 
 func RegisterKubeClient(kube *kubernetes.Kube) gin.HandlerFunc {

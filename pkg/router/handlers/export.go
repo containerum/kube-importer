@@ -13,7 +13,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func ExportNamespaceList(ctx *gin.Context) {
+func ExportNamespaceListHandler(ctx *gin.Context) {
 
 	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
 
@@ -41,7 +41,7 @@ func ExportNamespaceList(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, nsList)
 }
 
-func ExportDeploymentsList(ctx *gin.Context) {
+func ExportDeploymentsListHandler(ctx *gin.Context) {
 	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
 
 	quotas, err := kube.GetDeploymentList("", "")
@@ -60,8 +60,7 @@ func ExportDeploymentsList(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, ret)
 }
 
-func ExportServicesList(ctx *gin.Context) {
-
+func ExportServicesListHandler(ctx *gin.Context) {
 	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
 
 	quotas, err := kube.GetServiceList("")
@@ -80,8 +79,7 @@ func ExportServicesList(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, ret)
 }
 
-func ExportIngressesList(ctx *gin.Context) {
-
+func ExportIngressesListHandler(ctx *gin.Context) {
 	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
 
 	quotas, err := kube.GetIngressList("")
@@ -100,7 +98,7 @@ func ExportIngressesList(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, ret)
 }
 
-func ExportConfigMapsList(ctx *gin.Context) {
+func ExportConfigMapsListHandler(ctx *gin.Context) {
 	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
 
 	quotas, err := kube.GetConfigMapList("")
@@ -119,7 +117,7 @@ func ExportConfigMapsList(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, ret)
 }
 
-func ExportVolumesList(ctx *gin.Context) {
+func ExportVolumesListHandler(ctx *gin.Context) {
 
 	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
 
@@ -139,8 +137,7 @@ func ExportVolumesList(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, ret)
 }
 
-func ExportStoragesList(ctx *gin.Context) {
-
+func ExportStoragesListHandler(ctx *gin.Context) {
 	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
 
 	storageList, err := kube.GetStorageClassesList()

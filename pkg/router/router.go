@@ -48,26 +48,26 @@ func initMiddlewares(e gin.IRouter, kube *kubernetes.Kube, res *clients.Resource
 }
 
 func initRoutes(e gin.IRouter) {
-	e.GET("/namespaces", h.ExportNamespaceList)
-	e.POST("/namespaces", h.ImportNamespaceList)
+	e.GET("/namespaces", h.ExportNamespaceListHandler)
+	e.POST("/namespaces", h.ImportNamespaceListHandler)
 
-	e.GET("/deployments", h.ExportDeploymentsList)
-	e.POST("/deployments", h.ImportDeploymentsList)
+	e.GET("/deployments", h.ExportDeploymentsListHandler)
+	e.POST("/deployments", h.ImportDeploymentsListHandler)
 
-	e.GET("/services", h.ExportServicesList)
-	e.POST("/services", h.ImportServicesList)
+	e.GET("/services", h.ExportServicesListHandler)
+	e.POST("/services", h.ImportServicesListHandler)
 
-	e.GET("/configmaps", h.ExportConfigMapsList)
-	e.POST("/configmaps", h.ImportConfigMapsList)
+	e.GET("/configmaps", h.ExportConfigMapsListHandler)
+	e.POST("/configmaps", h.ImportConfigMapsListHandler)
 
-	e.GET("/ingresses", h.ExportIngressesList)
-	e.POST("/ingresses", h.ImportIngressesList)
+	e.GET("/ingresses", h.ExportIngressesListHandler)
+	e.POST("/ingresses", h.ImportIngressesListHandler)
 
-	e.GET("/volumes", h.ExportVolumesList)
+	e.GET("/volumes", h.ExportVolumesListHandler)
 	//TODO Import volumes
 
-	e.GET("/storages", h.ExportStoragesList)
+	e.GET("/storages", h.ExportStoragesListHandler)
 	//TODO Import storages
 
-	//TODO Import all
+	e.POST("/all", h.ImportAllHandler)
 }
