@@ -1,0 +1,7 @@
+/.idea
+secretdata
+/testdata
+build
+kube-api
+!kube-api/
+*.sh
