@@ -14,6 +14,7 @@ const (
 	KubeClient = "kubernetes-client"
 	ResClient  = "resource-client"
 	PermClient = "perm-client"
+	VolClient  = "vol-client"
 )
 
 func RegisterKubeClient(kube *kubernetes.Kube) gin.HandlerFunc {
@@ -31,5 +32,11 @@ func RegisterResourceClient(cli *clients.Resource) gin.HandlerFunc {
 func RegisterPermissionsClient(cli *clients.Permissions) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Set(PermClient, *cli)
+	}
+}
+
+func RegisterVolumesClient(cli *clients.Volumes) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Set(VolClient, *cli)
 	}
 }

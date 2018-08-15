@@ -10,6 +10,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	"fmt"
+
+	"git.containerum.net/ch/kube-api/pkg/kubeerrors"
 	"github.com/containerum/cherry/adaptors/gonic"
 	"github.com/containerum/kube-importer/pkg/clients"
 	"github.com/containerum/kube-importer/pkg/kierrors"
@@ -188,10 +191,73 @@ func importIngressesList(ctx *gin.Context, kube *kubernetes.Kube, res clients.Re
 	return nil
 }
 
+func ImportStoragesListHandler(ctx *gin.Context) {
+	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
+	vol := ctx.MustGet(m.VolClient).(clients.Volumes)
+
+	if err := importStoragesList(ctx, kube, vol); err != nil {
+		ctx.Error(err)
+	} else {
+		ctx.Status(http.StatusAccepted)
+	}
+}
+
+func importStoragesList(ctx *gin.Context, kube *kubernetes.Kube, vol clients.Volumes) error {
+	storageList, err := kube.GetStorageClassesList()
+	if err != nil {
+		gonic.Gonic(kierrors.ErrUnableGetResourcesList(), ctx)
+		return err
+	}
+
+	ret, err := model.ParseStoragesList(storageList)
+	if err != nil {
+		gonic.Gonic(kubeerrors.ErrUnableGetResourcesList(), ctx)
+		return err
+	}
+
+	if err := vol.ImportStorages(ctx, *ret); err != nil {
+		gonic.Gonic(kierrors.ErrUnableCreateResource(), ctx)
+		return err
+	}
+	return nil
+}
+
+func ImportVolumesListHandler(ctx *gin.Context) {
+	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
+	vol := ctx.MustGet(m.VolClient).(clients.Volumes)
+
+	if err := importVolumesList(ctx, kube, vol); err != nil {
+		ctx.Error(err)
+	} else {
+		ctx.Status(http.StatusAccepted)
+	}
+}
+
+func importVolumesList(ctx *gin.Context, kube *kubernetes.Kube, vol clients.Volumes) error {
+	quotas, err := kube.GetPersistentVolumeClaimsList("")
+	if err != nil {
+		gonic.Gonic(kierrors.ErrUnableGetResourcesList(), ctx)
+		return err
+	}
+
+	ret, err := model.ParseKubePersistentVolumeClaimList(quotas, false)
+	if err != nil {
+		gonic.Gonic(kierrors.ErrUnableGetResourcesList(), ctx)
+		return err
+	}
+
+	if err := vol.ImportVolumes(ctx, *ret); err != nil {
+		gonic.Gonic(kierrors.ErrUnableCreateResource(), ctx)
+		return err
+	}
+	return nil
+}
+
 func ImportAllHandler(ctx *gin.Context) {
 	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
 	perm := ctx.MustGet(m.PermClient).(clients.Permissions)
 	res := ctx.MustGet(m.ResClient).(clients.Resource)
+	vol := ctx.MustGet(m.VolClient).(clients.Volumes)
 
 	if err := importNamespaceList(ctx, kube, perm); err != nil {
 		ctx.Error(err)
@@ -214,6 +280,20 @@ func ImportAllHandler(ctx *gin.Context) {
 	}
 
 	if err := importConfigMapsList(ctx, kube, res); err != nil {
+		ctx.Error(err)
+		return
+	}
+
+	fmt.Println("TEST1")
+
+	if err := importStoragesList(ctx, kube, vol); err != nil {
+		ctx.Error(err)
+		return
+	}
+
+	fmt.Println("TEST2")
+
+	if err := importVolumesList(ctx, kube, vol); err != nil {
 		ctx.Error(err)
 		return
 	}

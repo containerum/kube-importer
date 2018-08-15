@@ -64,6 +64,17 @@ var flags = []cli.Flag{
 		Name:   "permissions_url",
 		Usage:  "permissions url",
 	},
+	cli.StringFlag{
+		EnvVar: "CH_KUBE_IMPORTER_VOLUMES",
+		Name:   "volumes",
+		Value:  "http",
+		Usage:  "volumes client type",
+	},
+	cli.StringFlag{
+		EnvVar: "CH_KUBE_IMPORTER_VOLUMES_URL",
+		Name:   "volumes_url",
+		Usage:  "volumes url",
+	},
 }
 
 func setupLogs(c *cli.Context) {
@@ -110,6 +121,23 @@ func setupPermissions(c *cli.Context) (*clients.Permissions, error) {
 		return &client, nil
 	case "dummy":
 		client := clients.NewDummyPermissions()
+		return &client, nil
+	default:
+		return nil, errors.New("invalid permissions client type")
+	}
+}
+
+func setupVolumes(c *cli.Context) (*clients.Volumes, error) {
+	switch c.String("volumes") {
+	case "http":
+		permurl, err := url.Parse(c.String("volumes_url"))
+		if err != nil {
+			return nil, err
+		}
+		client := clients.NewVolumesHTTP(permurl)
+		return &client, nil
+	case "dummy":
+		client := clients.NewDummyVolumes()
 		return &client, nil
 	default:
 		return nil, errors.New("invalid permissions client type")

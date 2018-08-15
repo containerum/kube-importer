@@ -16,7 +16,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// Resource is an interface to resc-api service
+// Resource is an interface to resource service
 type Resource interface {
 	ImportDeployments(ctx context.Context, deploy kubtypes.DeploymentsList) error
 
@@ -32,7 +32,7 @@ type resc struct {
 	log    *cherrylog.LogrusAdapter
 }
 
-// NewResourceHTTP creates http client to resc-api service.
+// NewResourceHTTP creates http client to resource service.
 func NewResourceHTTP(u *url.URL) Resource {
 	log := logrus.WithField("component", "resource_client")
 	client := resty.New().
@@ -130,7 +130,7 @@ type rescDummy struct {
 	log *logrus.Entry
 }
 
-// NewDummyResource creates a dummy client to resc-api service. It does nothing but logs actions.
+// NewDummyResource creates a dummy client to resource service. It does nothing but logs actions.
 func NewDummyResource() Resource {
 	return rescDummy{log: logrus.WithField("component", "resource_client_dummy")}
 }

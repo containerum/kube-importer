@@ -21,14 +21,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func CreateRouter(kube *kubernetes.Kube, res *clients.Resource, perm *clients.Permissions, enableCORS bool) http.Handler {
+func CreateRouter(kube *kubernetes.Kube, res *clients.Resource, perm *clients.Permissions, vol *clients.Volumes, enableCORS bool) http.Handler {
 	e := gin.New()
-	initMiddlewares(e, kube, res, perm, enableCORS)
+	initMiddlewares(e, kube, res, perm, vol, enableCORS)
 	initRoutes(e)
 	return e
 }
 
-func initMiddlewares(e gin.IRouter, kube *kubernetes.Kube, res *clients.Resource, perm *clients.Permissions, enableCORS bool) {
+func initMiddlewares(e gin.IRouter, kube *kubernetes.Kube, res *clients.Resource, perm *clients.Permissions, vol *clients.Volumes, enableCORS bool) {
 	/* CORS */
 	if enableCORS {
 		cfg := cors.DefaultConfig()
@@ -39,6 +39,7 @@ func initMiddlewares(e gin.IRouter, kube *kubernetes.Kube, res *clients.Resource
 		e.Use(middleware.RegisterKubeClient(kube))
 		e.Use(middleware.RegisterResourceClient(res))
 		e.Use(middleware.RegisterPermissionsClient(perm))
+		e.Use(middleware.RegisterVolumesClient(vol))
 	}
 	e.Group("/static").
 		StaticFS("/", static.HTTP)
@@ -63,11 +64,11 @@ func initRoutes(e gin.IRouter) {
 	e.GET("/ingresses", h.ExportIngressesListHandler)
 	e.POST("/ingresses", h.ImportIngressesListHandler)
 
-	e.GET("/volumes", h.ExportVolumesListHandler)
-	//TODO Import volumes
-
 	e.GET("/storages", h.ExportStoragesListHandler)
-	//TODO Import storages
+	e.POST("/storages", h.ImportStoragesListHandler)
+
+	e.GET("/volumes", h.ExportVolumesListHandler)
+	e.POST("/volumes", h.ImportVolumesListHandler)
 
 	e.POST("/all", h.ImportAllHandler)
 }

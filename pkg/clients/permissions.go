@@ -15,7 +15,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// Permissions is an interface to resc-api service
+// Permissions is an interface to permissions service
 type Permissions interface {
 	ImportNamespaces(ctx context.Context, ns kubtypes.NamespacesList) error
 }
@@ -25,7 +25,7 @@ type permc struct {
 	log    *cherrylog.LogrusAdapter
 }
 
-// NewResourceHTTP creates http client to resc-api service.
+// NewPermissionsHTTP creates http client to permissions service.
 func NewPermissionsHTTP(u *url.URL) Permissions {
 	log := logrus.WithField("component", "permissions_client")
 	client := resty.New().
@@ -72,7 +72,7 @@ type permcDummy struct {
 	log *logrus.Entry
 }
 
-// NewDummyResource creates a dummy client to resc-api service. It does nothing but logs actions.
+// NewDummyResource creates a dummy client to permissions service. It does nothing but logs actions.
 func NewDummyPermissions() Permissions {
 	return permcDummy{log: logrus.WithField("component", "permissions_client_dummy")}
 }

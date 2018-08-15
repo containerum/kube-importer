@@ -117,26 +117,6 @@ func ExportConfigMapsListHandler(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, ret)
 }
 
-func ExportVolumesListHandler(ctx *gin.Context) {
-
-	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
-
-	quotas, err := kube.GetPersistentVolumeClaimsList("")
-	if err != nil {
-		gonic.Gonic(kierrors.ErrUnableGetResourcesList(), ctx)
-		return
-	}
-
-	ret, err := model.ParseKubePersistentVolumeClaimList(quotas, false)
-	if err != nil {
-		ctx.Error(err)
-		gonic.Gonic(kierrors.ErrUnableGetResourcesList(), ctx)
-		return
-	}
-
-	ctx.JSON(http.StatusOK, ret)
-}
-
 func ExportStoragesListHandler(ctx *gin.Context) {
 	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
 
@@ -150,6 +130,26 @@ func ExportStoragesListHandler(ctx *gin.Context) {
 	if err != nil {
 		ctx.Error(err)
 		gonic.Gonic(kubeerrors.ErrUnableGetResourcesList(), ctx)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, ret)
+}
+
+func ExportVolumesListHandler(ctx *gin.Context) {
+
+	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
+
+	pvc, err := kube.GetPersistentVolumeClaimsList("")
+	if err != nil {
+		gonic.Gonic(kierrors.ErrUnableGetResourcesList(), ctx)
+		return
+	}
+
+	ret, err := model.ParseKubePersistentVolumeClaimList(pvc, false)
+	if err != nil {
+		ctx.Error(err)
+		gonic.Gonic(kierrors.ErrUnableGetResourcesList(), ctx)
 		return
 	}
 
