@@ -14,11 +14,23 @@ import (
 	m "github.com/containerum/kube-importer/pkg/router/middleware"
 )
 
-func ImportNamespaceListHandler(ctx *gin.Context) {
+// swagger:operation POST /namespaces Import ImportNamespacesList
+// Import namespaces.
+//
+// ---
+// x-method-visibility: public
+// responses:
+//  '202':
+//    description: import result
+//    schema:
+//      $ref: '#/definitions/ImportResponse'
+//  default:
+//    $ref: '#/responses/error'
+func ImportNamespacesListHandler(ctx *gin.Context) {
 	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
 	perm := ctx.MustGet(m.PermClient).(clients.Permissions)
 
-	resp, err := importNamespaceList(ctx, kube, perm)
+	resp, err := importNamespacesList(ctx, kube, perm)
 	if err != nil {
 		ctx.Error(err)
 	} else {
@@ -26,6 +38,18 @@ func ImportNamespaceListHandler(ctx *gin.Context) {
 	}
 }
 
+// swagger:operation POST /deployments Import ImportDeploymentsList
+// Import deployments.
+//
+// ---
+// x-method-visibility: public
+// responses:
+//  '202':
+//    description: import result
+//    schema:
+//      $ref: '#/definitions/ImportResponse'
+//  default:
+//    $ref: '#/responses/error'
 func ImportDeploymentsListHandler(ctx *gin.Context) {
 	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
 	res := ctx.MustGet(m.ResClient).(clients.Resource)
@@ -37,6 +61,18 @@ func ImportDeploymentsListHandler(ctx *gin.Context) {
 	}
 }
 
+// swagger:operation POST /services Import ImportServicesList
+// Import services.
+//
+// ---
+// x-method-visibility: public
+// responses:
+//  '202':
+//    description: import result
+//    schema:
+//      $ref: '#/definitions/ImportResponse'
+//  default:
+//    $ref: '#/responses/error'
 func ImportServicesListHandler(ctx *gin.Context) {
 	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
 	res := ctx.MustGet(m.ResClient).(clients.Resource)
@@ -49,6 +85,18 @@ func ImportServicesListHandler(ctx *gin.Context) {
 	}
 }
 
+// swagger:operation POST /ingresses Import ImportIngressesList
+// Import ingresses.
+//
+// ---
+// x-method-visibility: public
+// responses:
+//  '202':
+//    description: import result
+//    schema:
+//      $ref: '#/definitions/ImportResponse'
+//  default:
+//    $ref: '#/responses/error'
 func ImportIngressesListHandler(ctx *gin.Context) {
 	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
 	res := ctx.MustGet(m.ResClient).(clients.Resource)
@@ -61,6 +109,18 @@ func ImportIngressesListHandler(ctx *gin.Context) {
 	}
 }
 
+// swagger:operation POST /configmaps Import ImportConfigMapsList
+// Import configmaps.
+//
+// ---
+// x-method-visibility: public
+// responses:
+//  '202':
+//    description: import result
+//    schema:
+//      $ref: '#/definitions/ImportResponse'
+//  default:
+//    $ref: '#/responses/error'
 func ImportConfigMapsListHandler(ctx *gin.Context) {
 	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
 	res := ctx.MustGet(m.ResClient).(clients.Resource)
@@ -73,6 +133,18 @@ func ImportConfigMapsListHandler(ctx *gin.Context) {
 	}
 }
 
+// swagger:operation POST /storages Import ImportStoragesList
+// Import storages.
+//
+// ---
+// x-method-visibility: public
+// responses:
+//  '202':
+//    description: import result
+//    schema:
+//      $ref: '#/definitions/ImportResponse'
+//  default:
+//    $ref: '#/responses/error'
 func ImportStoragesListHandler(ctx *gin.Context) {
 	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
 	vol := ctx.MustGet(m.VolClient).(clients.Volumes)
@@ -85,6 +157,18 @@ func ImportStoragesListHandler(ctx *gin.Context) {
 	}
 }
 
+// swagger:operation POST /volumes Import ImportVolumesList
+// Import volumes.
+//
+// ---
+// x-method-visibility: public
+// responses:
+//  '202':
+//    description: import result
+//    schema:
+//      $ref: '#/definitions/ImportResponse'
+//  default:
+//    $ref: '#/responses/error'
 func ImportVolumesListHandler(ctx *gin.Context) {
 	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
 	vol := ctx.MustGet(m.VolClient).(clients.Volumes)
@@ -97,7 +181,79 @@ func ImportVolumesListHandler(ctx *gin.Context) {
 	}
 }
 
-func importNamespaceList(ctx *gin.Context, kube *kubernetes.Kube, perm clients.Permissions) (*kubtypes.ImportResponse, error) {
+// swagger:operation POST /all Import ImportAllHandler
+// Import volumes.
+//
+// ---
+// x-method-visibility: public
+// responses:
+//  '202':
+//    description: import result
+//    schema:
+//      $ref: '#/definitions/ImportResponseTotal'
+//  default:
+//    $ref: '#/responses/error'
+func ImportAllHandler(ctx *gin.Context) {
+	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
+	perm := ctx.MustGet(m.PermClient).(clients.Permissions)
+	res := ctx.MustGet(m.ResClient).(clients.Resource)
+	vol := ctx.MustGet(m.VolClient).(clients.Volumes)
+
+	ret := make(kubtypes.ImportResponseTotal)
+
+	respNs, err := importNamespacesList(ctx, kube, perm)
+	if err != nil {
+		ctx.Error(err)
+		return
+	}
+	ret["namespaces"] = *respNs
+
+	respDepl, err := importDeploymentsList(ctx, kube, res)
+	if err != nil {
+		ctx.Error(err)
+		return
+	}
+	ret["deployments"] = *respDepl
+
+	respSvc, err := importServicesList(ctx, kube, res)
+	if err != nil {
+		ctx.Error(err)
+		return
+	}
+	ret["services"] = *respSvc
+
+	respIngr, err := importIngressesList(ctx, kube, res)
+	if err != nil {
+		ctx.Error(err)
+		return
+	}
+	ret["ingresses"] = *respIngr
+
+	respCM, err := importConfigMapsList(ctx, kube, res)
+	if err != nil {
+		ctx.Error(err)
+		return
+	}
+	ret["configmaps"] = *respCM
+
+	respStorages, err := importStoragesList(ctx, kube, vol)
+	if err != nil {
+		ctx.Error(err)
+		return
+	}
+	ret["storages"] = *respStorages
+
+	respVolumes, err := importVolumesList(ctx, kube, vol)
+	if err != nil {
+		ctx.Error(err)
+		return
+	}
+	ret["volumes"] = *respVolumes
+
+	ctx.JSON(http.StatusAccepted, ret)
+}
+
+func importNamespacesList(ctx *gin.Context, kube *kubernetes.Kube, perm clients.Permissions) (*kubtypes.ImportResponse, error) {
 	ret, err := exportNamespaces(kube)
 	if err != nil {
 		gonic.Gonic(kierrors.ErrUnableGetResourcesList(), ctx)
@@ -211,64 +367,4 @@ func importVolumesList(ctx *gin.Context, kube *kubernetes.Kube, vol clients.Volu
 		return nil, err
 	}
 	return resp, nil
-}
-
-func ImportAllHandler(ctx *gin.Context) {
-	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
-	perm := ctx.MustGet(m.PermClient).(clients.Permissions)
-	res := ctx.MustGet(m.ResClient).(clients.Resource)
-	vol := ctx.MustGet(m.VolClient).(clients.Volumes)
-
-	ret := make(kubtypes.ImportResponseTotal)
-
-	respNs, err := importNamespaceList(ctx, kube, perm)
-	if err != nil {
-		ctx.Error(err)
-		return
-	}
-	ret["namespaces"] = *respNs
-
-	respDepl, err := importDeploymentsList(ctx, kube, res)
-	if err != nil {
-		ctx.Error(err)
-		return
-	}
-	ret["deployments"] = *respDepl
-
-	respSvc, err := importServicesList(ctx, kube, res)
-	if err != nil {
-		ctx.Error(err)
-		return
-	}
-	ret["services"] = *respSvc
-
-	respIngr, err := importIngressesList(ctx, kube, res)
-	if err != nil {
-		ctx.Error(err)
-		return
-	}
-	ret["ingresses"] = *respIngr
-
-	respCM, err := importConfigMapsList(ctx, kube, res)
-	if err != nil {
-		ctx.Error(err)
-		return
-	}
-	ret["configmaps"] = *respCM
-
-	respStorages, err := importStoragesList(ctx, kube, vol)
-	if err != nil {
-		ctx.Error(err)
-		return
-	}
-	ret["storages"] = *respStorages
-
-	respVolumes, err := importVolumesList(ctx, kube, vol)
-	if err != nil {
-		ctx.Error(err)
-		return
-	}
-	ret["volumes"] = *respVolumes
-
-	ctx.JSON(http.StatusAccepted, ret)
 }

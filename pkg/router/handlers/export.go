@@ -13,7 +13,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func ExportNamespaceListHandler(ctx *gin.Context) {
+// swagger:operation GET /namespaces Export ExportNamespacesList
+// Export namespaces.
+//
+// ---
+// x-method-visibility: public
+// responses:
+//  '200':
+//    description: export result
+//    schema:
+//      $ref: '#/definitions/NamespacesList'
+//  default:
+//    $ref: '#/responses/error'
+func ExportNamespacesListHandler(ctx *gin.Context) {
 	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
 	ret, err := exportNamespaces(kube)
 	if err != nil {
@@ -23,6 +35,18 @@ func ExportNamespaceListHandler(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, ret)
 }
 
+// swagger:operation GET /deployments Export ExportDeploymentsList
+// Export namespaces.
+//
+// ---
+// x-method-visibility: public
+// responses:
+//  '200':
+//    description: export result
+//    schema:
+//      $ref: '#/definitions/DeploymentsList'
+//  default:
+//    $ref: '#/responses/error'
 func ExportDeploymentsListHandler(ctx *gin.Context) {
 	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
 	ret, err := exportDeployments(kube)
@@ -33,6 +57,18 @@ func ExportDeploymentsListHandler(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, ret)
 }
 
+// swagger:operation GET /services Export ExportServicesList
+// Export services.
+//
+// ---
+// x-method-visibility: public
+// responses:
+//  '200':
+//    description: export result
+//    schema:
+//      $ref: '#/definitions/ServiceWithParamList'
+//  default:
+//    $ref: '#/responses/error'
 func ExportServicesListHandler(ctx *gin.Context) {
 	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
 	ret, err := exportServices(kube)
@@ -43,6 +79,18 @@ func ExportServicesListHandler(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, ret)
 }
 
+// swagger:operation GET /ingresses Export ExportIngressesList
+// Export ingresses.
+//
+// ---
+// x-method-visibility: public
+// responses:
+//  '200':
+//    description: export result
+//    schema:
+//      $ref: '#/definitions/ServiceWithParamList'
+//  default:
+//    $ref: '#/responses/error'
 func ExportIngressesListHandler(ctx *gin.Context) {
 	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
 	ret, err := exportIngresses(kube)
@@ -53,6 +101,18 @@ func ExportIngressesListHandler(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, ret)
 }
 
+// swagger:operation GET /configmaps Export ExportConfigMapsList
+// Export config maps.
+//
+// ---
+// x-method-visibility: public
+// responses:
+//  '200':
+//    description: export result
+//    schema:
+//      $ref: '#/definitions/ConfigMapsList'
+//  default:
+//    $ref: '#/responses/error'
 func ExportConfigMapsListHandler(ctx *gin.Context) {
 	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
 	ret, err := exportConfigMaps(kube)
@@ -63,6 +123,18 @@ func ExportConfigMapsListHandler(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, ret)
 }
 
+// swagger:operation GET /storages Export ExportStoragesList
+// Export storages.
+//
+// ---
+// x-method-visibility: public
+// responses:
+//  '200':
+//    description: export result
+//    schema:
+//      $ref: '#/definitions/StorageList'
+//  default:
+//    $ref: '#/responses/error'
 func ExportStoragesListHandler(ctx *gin.Context) {
 	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
 	ret, err := exportStorages(kube)
@@ -73,6 +145,18 @@ func ExportStoragesListHandler(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, ret)
 }
 
+// swagger:operation GET /volumes Export ExportVolumesList
+// Export volumes.
+//
+// ---
+// x-method-visibility: public
+// responses:
+//  '200':
+//    description: export result
+//    schema:
+//      $ref: '#/definitions/VolumesList'
+//  default:
+//    $ref: '#/responses/error'
 func ExportVolumesListHandler(ctx *gin.Context) {
 	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
 	ret, err := exportVolumes(kube)

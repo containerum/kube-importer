@@ -50,8 +50,8 @@ func initMiddlewares(e gin.IRouter, kube *kubernetes.Kube, res *clients.Resource
 }
 
 func initRoutes(e gin.IRouter) {
-	e.GET("/namespaces", h.ExportNamespaceListHandler)
-	e.POST("/namespaces", h.ImportNamespaceListHandler)
+	e.GET("/namespaces", h.ExportNamespacesListHandler)
+	e.POST("/namespaces", h.ImportNamespacesListHandler)
 
 	e.GET("/deployments", h.ExportDeploymentsListHandler)
 	e.POST("/deployments", h.ImportDeploymentsListHandler)

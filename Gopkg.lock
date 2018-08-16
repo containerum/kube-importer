@@ -19,7 +19,7 @@
   name = "git.containerum.net/ch/resource-service"
   packages = ["pkg/util/coblog"]
   pruneopts = "NUT"
-  revision = "9ce55ef2ff465327e49c5d8ccd6e8a0ae129068e"
+  revision = "d0d09ee2c13707c8a546555cf7db7770c0960b52"
 
 [[projects]]
   digest = "1:d8ebbd207f3d3266d4423ce4860c9f3794956306ded6c7ba312ecc69cdfbf04c"
@@ -447,7 +447,7 @@
     "webdav/internal/xml",
   ]
   pruneopts = "NUT"
-  revision = "c39426892332e1bb5ec0a434a079bf82f5d30c54"
+  revision = "aaf60122140d3fcf75376d319f0554393160eb50"
 
 [[projects]]
   branch = "master"
@@ -679,7 +679,6 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
-    "git.containerum.net/ch/kube-api/pkg/kubeerrors",
     "git.containerum.net/ch/kube-api/pkg/kubernetes",
     "git.containerum.net/ch/kube-api/pkg/model",
     "git.containerum.net/ch/resource-service/pkg/util/coblog",

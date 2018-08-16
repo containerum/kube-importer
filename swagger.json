@@ -11,7 +11,354 @@
     "title": "Kube-Importer",
     "version": "0.0.1"
   },
-  "paths": {},
+  "paths": {
+    "/all": {
+      "post": {
+        "tags": [
+          "Import"
+        ],
+        "summary": "Import volumes.",
+        "operationId": "ImportAllHandler",
+        "responses": {
+          "202": {
+            "description": "import result",
+            "schema": {
+              "$ref": "#/definitions/ImportResponseTotal"
+            }
+          },
+          "default": {
+            "description": "cherry error",
+            "schema": {
+              "$ref": "#/definitions/importAllHandlerDefaultBody"
+            }
+          }
+        },
+        "x-method-visibility": "public"
+      }
+    },
+    "/configmaps": {
+      "get": {
+        "tags": [
+          "Export"
+        ],
+        "summary": "Export config maps.",
+        "operationId": "ExportConfigMapsList",
+        "responses": {
+          "200": {
+            "description": "export result",
+            "schema": {
+              "$ref": "#/definitions/ConfigMapsList"
+            }
+          },
+          "default": {
+            "description": "cherry error",
+            "schema": {
+              "$ref": "#/definitions/importAllHandlerDefaultBody"
+            }
+          }
+        },
+        "x-method-visibility": "public"
+      },
+      "post": {
+        "tags": [
+          "Import"
+        ],
+        "summary": "Import configmaps.",
+        "operationId": "ImportConfigMapsList",
+        "responses": {
+          "202": {
+            "description": "import result",
+            "schema": {
+              "$ref": "#/definitions/ImportResponse"
+            }
+          },
+          "default": {
+            "description": "cherry error",
+            "schema": {
+              "$ref": "#/definitions/importAllHandlerDefaultBody"
+            }
+          }
+        },
+        "x-method-visibility": "public"
+      }
+    },
+    "/deployments": {
+      "get": {
+        "tags": [
+          "Export"
+        ],
+        "summary": "Export namespaces.",
+        "operationId": "ExportDeploymentsList",
+        "responses": {
+          "200": {
+            "description": "export result",
+            "schema": {
+              "$ref": "#/definitions/DeploymentsList"
+            }
+          },
+          "default": {
+            "description": "cherry error",
+            "schema": {
+              "$ref": "#/definitions/importAllHandlerDefaultBody"
+            }
+          }
+        },
+        "x-method-visibility": "public"
+      },
+      "post": {
+        "tags": [
+          "Import"
+        ],
+        "summary": "Import deployments.",
+        "operationId": "ImportDeploymentsList",
+        "responses": {
+          "202": {
+            "description": "import result",
+            "schema": {
+              "$ref": "#/definitions/ImportResponse"
+            }
+          },
+          "default": {
+            "description": "cherry error",
+            "schema": {
+              "$ref": "#/definitions/importAllHandlerDefaultBody"
+            }
+          }
+        },
+        "x-method-visibility": "public"
+      }
+    },
+    "/ingresses": {
+      "get": {
+        "tags": [
+          "Export"
+        ],
+        "summary": "Export ingresses.",
+        "operationId": "ExportIngressesList",
+        "responses": {
+          "200": {
+            "description": "export result",
+            "schema": {
+              "$ref": "#/definitions/ServiceWithParamList"
+            }
+          },
+          "default": {
+            "description": "cherry error",
+            "schema": {
+              "$ref": "#/definitions/importAllHandlerDefaultBody"
+            }
+          }
+        },
+        "x-method-visibility": "public"
+      },
+      "post": {
+        "tags": [
+          "Import"
+        ],
+        "summary": "Import ingresses.",
+        "operationId": "ImportIngressesList",
+        "responses": {
+          "202": {
+            "description": "import result",
+            "schema": {
+              "$ref": "#/definitions/ImportResponse"
+            }
+          },
+          "default": {
+            "description": "cherry error",
+            "schema": {
+              "$ref": "#/definitions/importAllHandlerDefaultBody"
+            }
+          }
+        },
+        "x-method-visibility": "public"
+      }
+    },
+    "/namespaces": {
+      "get": {
+        "tags": [
+          "Export"
+        ],
+        "summary": "Export namespaces.",
+        "operationId": "ExportNamespacesList",
+        "responses": {
+          "200": {
+            "description": "export result",
+            "schema": {
+              "$ref": "#/definitions/NamespacesList"
+            }
+          },
+          "default": {
+            "description": "cherry error",
+            "schema": {
+              "$ref": "#/definitions/importAllHandlerDefaultBody"
+            }
+          }
+        },
+        "x-method-visibility": "public"
+      },
+      "post": {
+        "tags": [
+          "Import"
+        ],
+        "summary": "Import namespaces.",
+        "operationId": "ImportNamespacesList",
+        "responses": {
+          "202": {
+            "description": "import result",
+            "schema": {
+              "$ref": "#/definitions/ImportResponse"
+            }
+          },
+          "default": {
+            "description": "cherry error",
+            "schema": {
+              "$ref": "#/definitions/importAllHandlerDefaultBody"
+            }
+          }
+        },
+        "x-method-visibility": "public"
+      }
+    },
+    "/services": {
+      "get": {
+        "tags": [
+          "Export"
+        ],
+        "summary": "Export services.",
+        "operationId": "ExportServicesList",
+        "responses": {
+          "200": {
+            "description": "export result",
+            "schema": {
+              "$ref": "#/definitions/ServiceWithParamList"
+            }
+          },
+          "default": {
+            "description": "cherry error",
+            "schema": {
+              "$ref": "#/definitions/importAllHandlerDefaultBody"
+            }
+          }
+        },
+        "x-method-visibility": "public"
+      },
+      "post": {
+        "tags": [
+          "Import"
+        ],
+        "summary": "Import services.",
+        "operationId": "ImportServicesList",
+        "responses": {
+          "202": {
+            "description": "import result",
+            "schema": {
+              "$ref": "#/definitions/ImportResponse"
+            }
+          },
+          "default": {
+            "description": "cherry error",
+            "schema": {
+              "$ref": "#/definitions/importAllHandlerDefaultBody"
+            }
+          }
+        },
+        "x-method-visibility": "public"
+      }
+    },
+    "/storages": {
+      "get": {
+        "tags": [
+          "Export"
+        ],
+        "summary": "Export storages.",
+        "operationId": "ExportStoragesList",
+        "responses": {
+          "200": {
+            "description": "export result",
+            "schema": {
+              "$ref": "#/definitions/StorageList"
+            }
+          },
+          "default": {
+            "description": "cherry error",
+            "schema": {
+              "$ref": "#/definitions/importAllHandlerDefaultBody"
+            }
+          }
+        },
+        "x-method-visibility": "public"
+      },
+      "post": {
+        "tags": [
+          "Import"
+        ],
+        "summary": "Import storages.",
+        "operationId": "ImportStoragesList",
+        "responses": {
+          "202": {
+            "description": "import result",
+            "schema": {
+              "$ref": "#/definitions/ImportResponse"
+            }
+          },
+          "default": {
+            "description": "cherry error",
+            "schema": {
+              "$ref": "#/definitions/importAllHandlerDefaultBody"
+            }
+          }
+        },
+        "x-method-visibility": "public"
+      }
+    },
+    "/volumes": {
+      "get": {
+        "tags": [
+          "Export"
+        ],
+        "summary": "Export volumes.",
+        "operationId": "ExportVolumesList",
+        "responses": {
+          "200": {
+            "description": "export result",
+            "schema": {
+              "$ref": "#/definitions/VolumesList"
+            }
+          },
+          "default": {
+            "description": "cherry error",
+            "schema": {
+              "$ref": "#/definitions/importAllHandlerDefaultBody"
+            }
+          }
+        },
+        "x-method-visibility": "public"
+      },
+      "post": {
+        "tags": [
+          "Import"
+        ],
+        "summary": "Import volumes.",
+        "operationId": "ImportVolumesList",
+        "responses": {
+          "202": {
+            "description": "import result",
+            "schema": {
+              "$ref": "#/definitions/ImportResponse"
+            }
+          },
+          "default": {
+            "description": "cherry error",
+            "schema": {
+              "$ref": "#/definitions/importAllHandlerDefaultBody"
+            }
+          }
+        },
+        "x-method-visibility": "public"
+      }
+    }
+  },
   "definitions": {
     "AccessLevel": {
       "type": "string",
@@ -1648,6 +1995,56 @@
         }
       },
       "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
+    },
+    "importAllHandlerDefaultBody": {
+      "description": "Err -- standard serializable API error\nMessage -- constant error message:\n+ \"invalid username\"\n+ \"quota exceeded\"\n+ \"validation error\"\n...etc...\nID -- unique error identification code\nDetails -- optional context error messages kinda\n+ \"field 'Replicas' must be non-zero value\"\n+ \"not enough tights to feed gopher\"\n+ \"resource 'God' does't exist\"\nFields -- optional set of key-value pairs",
+      "type": "object",
+      "properties": {
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Details"
+        },
+        "fields": {
+          "description": "Fields -- represents additional key-value fields of error",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-package": "github.com/containerum/cherry"
+        },
+        "id": {
+          "description": "ErrID -- represents unique error ID",
+          "type": "object",
+          "properties": {
+            "kind": {
+              "description": "ErrKind -- represents kind of error",
+              "type": "integer",
+              "format": "uint64",
+              "x-go-package": "github.com/containerum/cherry"
+            },
+            "sid": {
+              "description": "ErrSID -- represents service ID of error",
+              "type": "string",
+              "x-go-package": "github.com/containerum/cherry"
+            }
+          },
+          "x-go-package": "github.com/containerum/cherry"
+        },
+        "message": {
+          "type": "string",
+          "x-go-name": "Message"
+        },
+        "status_http": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "StatusHTTP"
+        }
+      },
+      "x-go-gen-location": "operations",
+      "x-go-package": "github.com/containerum/cherry"
     }
   },
   "parameters": {
@@ -1707,53 +2104,7 @@
     "error": {
       "description": "cherry error",
       "schema": {
-        "description": "Err -- standard serializable API error\nMessage -- constant error message:\n+ \"invalid username\"\n+ \"quota exceeded\"\n+ \"validation error\"\n...etc...\nID -- unique error identification code\nDetails -- optional context error messages kinda\n+ \"field 'Replicas' must be non-zero value\"\n+ \"not enough tights to feed gopher\"\n+ \"resource 'God' does't exist\"\nFields -- optional set of key-value pairs",
-        "type": "object",
-        "properties": {
-          "details": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "x-go-name": "Details"
-          },
-          "fields": {
-            "description": "Fields -- represents additional key-value fields of error",
-            "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            },
-            "x-go-package": "github.com/containerum/cherry"
-          },
-          "id": {
-            "description": "ErrID -- represents unique error ID",
-            "type": "object",
-            "properties": {
-              "kind": {
-                "description": "ErrKind -- represents kind of error",
-                "type": "integer",
-                "format": "uint64",
-                "x-go-package": "github.com/containerum/cherry"
-              },
-              "sid": {
-                "description": "ErrSID -- represents service ID of error",
-                "type": "string",
-                "x-go-package": "github.com/containerum/cherry"
-              }
-            },
-            "x-go-package": "github.com/containerum/cherry"
-          },
-          "message": {
-            "type": "string",
-            "x-go-name": "Message"
-          },
-          "status_http": {
-            "type": "integer",
-            "format": "int64",
-            "x-go-name": "StatusHTTP"
-          }
-        },
-        "x-go-package": "github.com/containerum/cherry"
+        "$ref": "#/definitions/importAllHandlerDefaultBody"
       }
     }
   }
