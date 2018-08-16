@@ -6,15 +6,12 @@ import (
 	"git.containerum.net/ch/kube-api/pkg/kubernetes"
 	"git.containerum.net/ch/kube-api/pkg/model"
 	kubtypes "github.com/containerum/kube-client/pkg/model"
-	importerModel "github.com/containerum/kube-importer/pkg/model"
-	m "github.com/containerum/kube-importer/pkg/router/middleware"
-
 	"github.com/gin-gonic/gin"
 
-	"git.containerum.net/ch/kube-api/pkg/kubeerrors"
 	"github.com/containerum/cherry/adaptors/gonic"
 	"github.com/containerum/kube-importer/pkg/clients"
 	"github.com/containerum/kube-importer/pkg/kierrors"
+	m "github.com/containerum/kube-importer/pkg/router/middleware"
 )
 
 func ImportNamespaceListHandler(ctx *gin.Context) {
@@ -29,36 +26,6 @@ func ImportNamespaceListHandler(ctx *gin.Context) {
 	}
 }
 
-func importNamespaceList(ctx *gin.Context, kube *kubernetes.Kube, perm clients.Permissions) (*kubtypes.ImportResponse, error) {
-	quotas, err := kube.GetNamespaceQuotaList("")
-	if err != nil {
-		gonic.Gonic(kierrors.ErrUnableGetResourcesList(), ctx)
-		return nil, err
-	}
-
-	nsList, err := model.ParseKubeResourceQuotaList(quotas)
-	if err != nil {
-		gonic.Gonic(kierrors.ErrUnableGetResourcesList(), ctx)
-		return nil, err
-	}
-
-	nss, err := kube.GetNamespaceList("")
-	if err != nil {
-		gonic.Gonic(kierrors.ErrUnableGetResourcesList(), ctx)
-		return nil, err
-	}
-
-	nsList = importerModel.AddNamespacesWithoutRQ(nsList, nss)
-
-	resp, err := perm.ImportNamespaces(ctx, *nsList)
-	if err != nil {
-		gonic.Gonic(kierrors.ErrUnableCreateResource(), ctx)
-		return nil, err
-	}
-
-	return resp, nil
-}
-
 func ImportDeploymentsListHandler(ctx *gin.Context) {
 	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
 	res := ctx.MustGet(m.ResClient).(clients.Resource)
@@ -68,28 +35,6 @@ func ImportDeploymentsListHandler(ctx *gin.Context) {
 	} else {
 		ctx.JSON(http.StatusAccepted, resp)
 	}
-}
-
-func importDeploymentsList(ctx *gin.Context, kube *kubernetes.Kube, res clients.Resource) (*kubtypes.ImportResponse, error) {
-	depl, err := kube.GetDeploymentList("", "")
-	if err != nil {
-		gonic.Gonic(kierrors.ErrUnableGetResourcesList(), ctx)
-		return nil, err
-	}
-
-	ret, err := model.ParseKubeDeploymentList(depl, false)
-	if err != nil {
-		gonic.Gonic(kierrors.ErrUnableGetResourcesList(), ctx)
-		return nil, err
-	}
-
-	resp, err := res.ImportDeployments(ctx, *ret)
-	if err != nil {
-		gonic.Gonic(kierrors.ErrUnableCreateResource(), ctx)
-		return nil, err
-	}
-
-	return resp, nil
 }
 
 func ImportServicesListHandler(ctx *gin.Context) {
@@ -104,27 +49,16 @@ func ImportServicesListHandler(ctx *gin.Context) {
 	}
 }
 
-func importServicesList(ctx *gin.Context, kube *kubernetes.Kube, res clients.Resource) (*kubtypes.ImportResponse, error) {
+func ImportIngressesListHandler(ctx *gin.Context) {
+	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
+	res := ctx.MustGet(m.ResClient).(clients.Resource)
 
-	quotas, err := kube.GetServiceList("")
+	resp, err := importIngressesList(ctx, kube, res)
 	if err != nil {
-		gonic.Gonic(kierrors.ErrUnableGetResourcesList(), ctx)
-		return nil, err
+		ctx.Error(err)
+	} else {
+		ctx.JSON(http.StatusAccepted, resp)
 	}
-
-	ret, err := model.ParseKubeServiceList(quotas, false)
-	if err != nil {
-		gonic.Gonic(kierrors.ErrUnableGetResourcesList(), ctx)
-		return nil, err
-	}
-
-	resp, err := res.ImportServices(ctx, *ret)
-	if err != nil {
-		gonic.Gonic(kierrors.ErrUnableCreateResource(), ctx)
-		return nil, err
-	}
-
-	return resp, nil
 }
 
 func ImportConfigMapsListHandler(ctx *gin.Context) {
@@ -139,66 +73,6 @@ func ImportConfigMapsListHandler(ctx *gin.Context) {
 	}
 }
 
-func importConfigMapsList(ctx *gin.Context, kube *kubernetes.Kube, res clients.Resource) (*kubtypes.ImportResponse, error) {
-	quotas, err := kube.GetConfigMapList("")
-	if err != nil {
-		gonic.Gonic(kierrors.ErrUnableGetResourcesList(), ctx)
-		return nil, err
-	}
-
-	ret, err := model.ParseKubeConfigMapList(quotas, false)
-	if err != nil {
-		gonic.Gonic(kierrors.ErrUnableGetResourcesList(), ctx)
-		return nil, err
-	}
-
-	for i := range ret.ConfigMaps {
-		ret.ConfigMaps[i].Data = nil
-	}
-
-	resp, err := res.ImportConfigMaps(ctx, *ret)
-	if err != nil {
-		gonic.Gonic(kierrors.ErrUnableCreateResource(), ctx)
-		return nil, err
-	}
-
-	return resp, nil
-}
-
-func ImportIngressesListHandler(ctx *gin.Context) {
-	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
-	res := ctx.MustGet(m.ResClient).(clients.Resource)
-
-	resp, err := importIngressesList(ctx, kube, res)
-	if err != nil {
-		ctx.Error(err)
-	} else {
-		ctx.JSON(http.StatusAccepted, resp)
-	}
-}
-
-func importIngressesList(ctx *gin.Context, kube *kubernetes.Kube, res clients.Resource) (*kubtypes.ImportResponse, error) {
-	quotas, err := kube.GetIngressList("")
-	if err != nil {
-		gonic.Gonic(kierrors.ErrUnableGetResourcesList(), ctx)
-		return nil, err
-	}
-
-	ret, err := model.ParseKubeIngressList(quotas, false)
-	if err != nil {
-		gonic.Gonic(kierrors.ErrUnableGetResourcesList(), ctx)
-		return nil, err
-	}
-
-	resp, err := res.ImportIngresses(ctx, *ret)
-	if err != nil {
-		gonic.Gonic(kierrors.ErrUnableCreateResource(), ctx)
-		return nil, err
-	}
-
-	return resp, nil
-}
-
 func ImportStoragesListHandler(ctx *gin.Context) {
 	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
 	vol := ctx.MustGet(m.VolClient).(clients.Volumes)
@@ -211,27 +85,6 @@ func ImportStoragesListHandler(ctx *gin.Context) {
 	}
 }
 
-func importStoragesList(ctx *gin.Context, kube *kubernetes.Kube, vol clients.Volumes) (*kubtypes.ImportResponse, error) {
-	storageList, err := kube.GetStorageClassesList()
-	if err != nil {
-		gonic.Gonic(kierrors.ErrUnableGetResourcesList(), ctx)
-		return nil, err
-	}
-
-	ret, err := model.ParseStoragesList(storageList)
-	if err != nil {
-		gonic.Gonic(kubeerrors.ErrUnableGetResourcesList(), ctx)
-		return nil, err
-	}
-
-	resp, err := vol.ImportStorages(ctx, *ret)
-	if err != nil {
-		gonic.Gonic(kierrors.ErrUnableCreateResource(), ctx)
-		return nil, err
-	}
-	return resp, nil
-}
-
 func ImportVolumesListHandler(ctx *gin.Context) {
 	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
 	vol := ctx.MustGet(m.VolClient).(clients.Volumes)
@@ -242,6 +95,101 @@ func ImportVolumesListHandler(ctx *gin.Context) {
 	} else {
 		ctx.JSON(http.StatusAccepted, resp)
 	}
+}
+
+func importNamespaceList(ctx *gin.Context, kube *kubernetes.Kube, perm clients.Permissions) (*kubtypes.ImportResponse, error) {
+	ret, err := exportNamespaces(kube)
+	if err != nil {
+		gonic.Gonic(kierrors.ErrUnableGetResourcesList(), ctx)
+		return nil, err
+	}
+
+	resp, err := perm.ImportNamespaces(ctx, ret)
+	if err != nil {
+		gonic.Gonic(kierrors.ErrUnableCreateResource(), ctx)
+		return nil, err
+	}
+
+	return resp, nil
+}
+
+func importDeploymentsList(ctx *gin.Context, kube *kubernetes.Kube, res clients.Resource) (*kubtypes.ImportResponse, error) {
+	ret, err := exportDeployments(kube)
+	if err != nil {
+		gonic.Gonic(kierrors.ErrUnableGetResourcesList(), ctx)
+		return nil, err
+	}
+
+	resp, err := res.ImportDeployments(ctx, ret)
+	if err != nil {
+		gonic.Gonic(kierrors.ErrUnableCreateResource(), ctx)
+		return nil, err
+	}
+
+	return resp, nil
+}
+
+func importServicesList(ctx *gin.Context, kube *kubernetes.Kube, res clients.Resource) (*kubtypes.ImportResponse, error) {
+	ret, err := exportServices(kube)
+	if err != nil {
+		gonic.Gonic(kierrors.ErrUnableGetResourcesList(), ctx)
+		return nil, err
+	}
+
+	resp, err := res.ImportServices(ctx, ret)
+	if err != nil {
+		gonic.Gonic(kierrors.ErrUnableCreateResource(), ctx)
+		return nil, err
+	}
+
+	return resp, nil
+}
+
+func importIngressesList(ctx *gin.Context, kube *kubernetes.Kube, res clients.Resource) (*kubtypes.ImportResponse, error) {
+	ret, err := exportIngresses(kube)
+	if err != nil {
+		gonic.Gonic(kierrors.ErrUnableGetResourcesList(), ctx)
+		return nil, err
+	}
+
+	resp, err := res.ImportIngresses(ctx, ret)
+	if err != nil {
+		gonic.Gonic(kierrors.ErrUnableCreateResource(), ctx)
+		return nil, err
+	}
+
+	return resp, nil
+}
+
+func importConfigMapsList(ctx *gin.Context, kube *kubernetes.Kube, res clients.Resource) (*kubtypes.ImportResponse, error) {
+	ret, err := exportConfigMaps(kube)
+	if err != nil {
+		gonic.Gonic(kierrors.ErrUnableGetResourcesList(), ctx)
+		return nil, err
+	}
+
+	resp, err := res.ImportConfigMaps(ctx, ret)
+	if err != nil {
+		gonic.Gonic(kierrors.ErrUnableCreateResource(), ctx)
+		return nil, err
+	}
+
+	return resp, nil
+}
+
+func importStoragesList(ctx *gin.Context, kube *kubernetes.Kube, vol clients.Volumes) (*kubtypes.ImportResponse, error) {
+	ret, err := exportStorages(kube)
+	if err != nil {
+		gonic.Gonic(kierrors.ErrUnableGetResourcesList(), ctx)
+		return nil, err
+	}
+
+	resp, err := vol.ImportStorages(ctx, ret)
+	if err != nil {
+		gonic.Gonic(kierrors.ErrUnableCreateResource(), ctx)
+		return nil, err
+	}
+	return resp, nil
 }
 
 func importVolumesList(ctx *gin.Context, kube *kubernetes.Kube, vol clients.Volumes) (*kubtypes.ImportResponse, error) {

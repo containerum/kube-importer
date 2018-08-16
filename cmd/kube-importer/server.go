@@ -36,7 +36,7 @@ func initServer(c *cli.Context) error {
 	vol, err := setupVolumes(c)
 	exitOnErr(err)
 
-	app := router.CreateRouter(&kube, res, perm, vol, c.Bool("cors"))
+	app := router.CreateRouter(&kube, res, perm, vol, c.StringSlice("exclude_ns"), c.Bool("cors"))
 
 	srv := &http.Server{
 		Addr:    ":" + c.String("port"),

@@ -21,14 +21,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func CreateRouter(kube *kubernetes.Kube, res *clients.Resource, perm *clients.Permissions, vol *clients.Volumes, enableCORS bool) http.Handler {
+func CreateRouter(kube *kubernetes.Kube, res *clients.Resource, perm *clients.Permissions, vol *clients.Volumes, excluded []string, enableCORS bool) http.Handler {
 	e := gin.New()
-	initMiddlewares(e, kube, res, perm, vol, enableCORS)
+	initMiddlewares(e, kube, res, perm, vol, excluded, enableCORS)
 	initRoutes(e)
 	return e
 }
 
-func initMiddlewares(e gin.IRouter, kube *kubernetes.Kube, res *clients.Resource, perm *clients.Permissions, vol *clients.Volumes, enableCORS bool) {
+func initMiddlewares(e gin.IRouter, kube *kubernetes.Kube, res *clients.Resource, perm *clients.Permissions, vol *clients.Volumes, excluded []string, enableCORS bool) {
+	middleware.SaveBlacklist(excluded)
 	/* CORS */
 	if enableCORS {
 		cfg := cors.DefaultConfig()
