@@ -20,7 +20,7 @@ var flags = []cli.Flag{
 		EnvVar: "CH_KUBE_IMPORTER_PORT",
 		Name:   "port",
 		Value:  "1666",
-		Usage:  "port for kube-api server",
+		Usage:  "port for kube-importer server",
 	},
 	cli.StringFlag{
 		EnvVar: "CH_KUBE_IMPORTER_KUBE_CONF",
