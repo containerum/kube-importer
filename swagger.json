@@ -7,3357 +7,15 @@
   ],
   "swagger": "2.0",
   "info": {
-    "description": "Kube API service is service for connection with Kubernetes.",
-    "title": "Kube API",
+    "description": "Resource-Service is service for importing kubernetes resources to other services.",
+    "title": "Kube-Importer",
     "version": "0.0.1"
   },
-  "paths": {
-    "/configmaps": {
-      "get": {
-        "tags": [
-          "ConfigMap"
-        ],
-        "summary": "Get config maps from all user namespaces.",
-        "operationId": "GetSelectedConfigMaps",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "config maps list from all users namespaces",
-            "schema": {
-              "$ref": "#/definitions/SelectedConfigMapsList"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "public"
-      }
-    },
-    "/ingresses": {
-      "get": {
-        "tags": [
-          "Ingress"
-        ],
-        "summary": "Get ingresses from all user namespaces.",
-        "operationId": "GetSelectedIngresses",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "ingresses list from all users namespaces",
-            "schema": {
-              "$ref": "#/definitions/SelectedIngressesList"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "private"
-      }
-    },
-    "/namespaces": {
-      "get": {
-        "tags": [
-          "Namespace"
-        ],
-        "summary": "Get namespaces list.",
-        "operationId": "GetNamespaceList",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "owner",
-            "in": "query"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "ingresses list",
-            "schema": {
-              "$ref": "#/definitions/NamespacesList"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "public"
-      },
-      "post": {
-        "tags": [
-          "Namespace"
-        ],
-        "summary": "Create namespace.",
-        "operationId": "CreateNamespace",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/Namespace"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "namespace created",
-            "schema": {
-              "$ref": "#/definitions/Namespace"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "private"
-      },
-      "delete": {
-        "tags": [
-          "Namespace"
-        ],
-        "summary": "Delete user namespaces.",
-        "operationId": "DeleteUserNamespaces",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          }
-        ],
-        "responses": {
-          "202": {
-            "description": "namespaces deleted"
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "private"
-      }
-    },
-    "/namespaces/{namespace}": {
-      "get": {
-        "tags": [
-          "Namespace"
-        ],
-        "summary": "Get namespace.",
-        "operationId": "GetNamespace",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "namespace",
-            "schema": {
-              "$ref": "#/definitions/Namespace"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "public"
-      },
-      "put": {
-        "tags": [
-          "Namespace"
-        ],
-        "summary": "Update namespace.",
-        "operationId": "UpdateNamespace",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/Namespace"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "namespace updated",
-            "schema": {
-              "$ref": "#/definitions/Namespace"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "private"
-      },
-      "delete": {
-        "tags": [
-          "Namespace"
-        ],
-        "summary": "Delete namespace.",
-        "operationId": "DeleteNamespace",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "202": {
-            "description": "namespace deleted"
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "private"
-      }
-    },
-    "/namespaces/{namespace}/configmaps": {
-      "get": {
-        "tags": [
-          "ConfigMap"
-        ],
-        "summary": "Get config maps list.",
-        "operationId": "GetConfigMapList",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "config maps list",
-            "schema": {
-              "$ref": "#/definitions/ConfigMapsList"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "public"
-      },
-      "post": {
-        "tags": [
-          "ConfigMap"
-        ],
-        "summary": "Create config map.",
-        "operationId": "CreateConfigMap",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/ConfigMap"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "config map created",
-            "schema": {
-              "$ref": "#/definitions/ConfigMap"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "public"
-      }
-    },
-    "/namespaces/{namespace}/configmaps/{configmap}": {
-      "get": {
-        "tags": [
-          "ConfigMap"
-        ],
-        "summary": "Get config map.",
-        "operationId": "GetConfigMap",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "configmap",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "config map",
-            "schema": {
-              "$ref": "#/definitions/ConfigMap"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "public"
-      },
-      "put": {
-        "tags": [
-          "ConfigMap"
-        ],
-        "summary": "Update config map.",
-        "operationId": "UpdateConfigMap",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "configmap",
-            "in": "path",
-            "required": true
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/ConfigMap"
-            }
-          }
-        ],
-        "responses": {
-          "202": {
-            "description": "config map updated",
-            "schema": {
-              "$ref": "#/definitions/ConfigMap"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "public"
-      },
-      "delete": {
-        "tags": [
-          "ConfigMap"
-        ],
-        "summary": "Delete config map.",
-        "operationId": "DeleteConfigMap",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "configmap",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "202": {
-            "description": "config map deleted"
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "public"
-      }
-    },
-    "/namespaces/{namespace}/deployments": {
-      "get": {
-        "tags": [
-          "Deployment"
-        ],
-        "summary": "Get deployments list.",
-        "operationId": "GetDeploymentList",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "owner",
-            "in": "query"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "deployments list",
-            "schema": {
-              "$ref": "#/definitions/DeploymentsList"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "public"
-      },
-      "post": {
-        "tags": [
-          "Deployment"
-        ],
-        "summary": "Create deployment.",
-        "operationId": "CreateDeployment",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/Deployment"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "deployment created",
-            "schema": {
-              "$ref": "#/definitions/Deployment"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "private"
-      }
-    },
-    "/namespaces/{namespace}/deployments/{deployment}": {
-      "get": {
-        "tags": [
-          "Deployment"
-        ],
-        "summary": "Get deployment.",
-        "operationId": "GetDeployment",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "deployment",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "deployment",
-            "schema": {
-              "$ref": "#/definitions/Deployment"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "public"
-      },
-      "put": {
-        "tags": [
-          "Deployment"
-        ],
-        "summary": "Update deployment.",
-        "operationId": "UpdateDeployment",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "deployment",
-            "in": "path",
-            "required": true
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/Deployment"
-            }
-          }
-        ],
-        "responses": {
-          "202": {
-            "description": "deployment updated",
-            "schema": {
-              "$ref": "#/definitions/Deployment"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "private"
-      },
-      "delete": {
-        "tags": [
-          "Deployment"
-        ],
-        "summary": "Delete deployment.",
-        "operationId": "DeleteDeployment",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "deployment",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "202": {
-            "description": "deployment deleted"
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "private"
-      }
-    },
-    "/namespaces/{namespace}/deployments/{deployment}/image": {
-      "put": {
-        "tags": [
-          "Deployment"
-        ],
-        "summary": "Update image in deployments container.",
-        "operationId": "UpdateDeploymentImage",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "deployment",
-            "in": "path",
-            "required": true
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/UpdateImage"
-            }
-          }
-        ],
-        "responses": {
-          "202": {
-            "description": "deployment updated",
-            "schema": {
-              "$ref": "#/definitions/Deployment"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "private"
-      }
-    },
-    "/namespaces/{namespace}/deployments/{deployment}/pods": {
-      "get": {
-        "tags": [
-          "Pod"
-        ],
-        "summary": "Get deployment pods list.",
-        "operationId": "GetDeploymentPodList",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "deployment",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "deployment pod list",
-            "schema": {
-              "$ref": "#/definitions/PodsList"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "public"
-      }
-    },
-    "/namespaces/{namespace}/deployments/{deployment}/replicas": {
-      "put": {
-        "tags": [
-          "Deployment"
-        ],
-        "summary": "Update deployments replicas count.",
-        "operationId": "UpdateDeploymentReplicas",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "deployment",
-            "in": "path",
-            "required": true
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/UpdateReplicas"
-            }
-          }
-        ],
-        "responses": {
-          "202": {
-            "description": "deployment updated",
-            "schema": {
-              "$ref": "#/definitions/Deployment"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "private"
-      }
-    },
-    "/namespaces/{namespace}/endpoints": {
-      "get": {
-        "tags": [
-          "Endpoint"
-        ],
-        "summary": "Get endpoints list.",
-        "operationId": "GetEndpointList",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "endpoints list",
-            "schema": {
-              "$ref": "#/definitions/EndpointsList"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "private"
-      },
-      "post": {
-        "tags": [
-          "Endpoint"
-        ],
-        "summary": "Create endpoint.",
-        "operationId": "CreateEndpoint",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/Endpoint"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "endpoint created",
-            "schema": {
-              "$ref": "#/definitions/Endpoint"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "private"
-      }
-    },
-    "/namespaces/{namespace}/endpoints/{endpoint}": {
-      "get": {
-        "tags": [
-          "Endpoint"
-        ],
-        "summary": "Get endpoint.",
-        "operationId": "GetEndpoint",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "endpoint",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "endpoint",
-            "schema": {
-              "$ref": "#/definitions/Endpoint"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "private"
-      },
-      "put": {
-        "tags": [
-          "Endpoint"
-        ],
-        "summary": "Update endpoint.",
-        "operationId": "UpdateEndpoint",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "endpoint",
-            "in": "path",
-            "required": true
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/Endpoint"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "endpoint updated",
-            "schema": {
-              "$ref": "#/definitions/Endpoint"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "private"
-      },
-      "delete": {
-        "tags": [
-          "Endpoint"
-        ],
-        "summary": "Delete endpoint.",
-        "operationId": "DeleteEndpoint",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "endpoint",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "202": {
-            "description": "endpoint deleted"
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "private"
-      }
-    },
-    "/namespaces/{namespace}/ingresses": {
-      "get": {
-        "tags": [
-          "Ingress"
-        ],
-        "summary": "Get ingresses list.",
-        "operationId": "GetIngressList",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "ingresses list",
-            "schema": {
-              "$ref": "#/definitions/IngressesList"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "public"
-      },
-      "post": {
-        "tags": [
-          "Ingress"
-        ],
-        "summary": "Create ingress.",
-        "operationId": "CreateIngress",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/Ingress"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "ingress created",
-            "schema": {
-              "$ref": "#/definitions/Ingress"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "private"
-      }
-    },
-    "/namespaces/{namespace}/ingresses/{ingress}": {
-      "get": {
-        "tags": [
-          "Ingress"
-        ],
-        "summary": "Get ingresses list.",
-        "operationId": "GetIngress",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "ingress",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "ingresses",
-            "schema": {
-              "$ref": "#/definitions/Ingress"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "public"
-      },
-      "put": {
-        "tags": [
-          "Ingress"
-        ],
-        "summary": "Update ingress.",
-        "operationId": "UpdateIngress",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "ingress",
-            "in": "path",
-            "required": true
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/Ingress"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "ingress updated",
-            "schema": {
-              "$ref": "#/definitions/Ingress"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "private"
-      },
-      "delete": {
-        "tags": [
-          "Ingress"
-        ],
-        "summary": "Delete ingress.",
-        "operationId": "DeleteIngress",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "ingress",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "202": {
-            "description": "ingress deleted"
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "private"
-      }
-    },
-    "/namespaces/{namespace}/pods": {
-      "get": {
-        "tags": [
-          "Pod"
-        ],
-        "summary": "Get pods list.",
-        "operationId": "GetPodList",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "owner",
-            "in": "query"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "pod list",
-            "schema": {
-              "$ref": "#/definitions/PodsList"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "public"
-      }
-    },
-    "/namespaces/{namespace}/pods/{pod}": {
-      "get": {
-        "tags": [
-          "Pod"
-        ],
-        "summary": "Get pod.",
-        "operationId": "GetPod",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "pod",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "pod",
-            "schema": {
-              "$ref": "#/definitions/Pod"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "public"
-      },
-      "delete": {
-        "tags": [
-          "Pod"
-        ],
-        "summary": "Delete pod.",
-        "operationId": "DeletePod",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "pod",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "202": {
-            "description": "pod deleted"
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "public"
-      }
-    },
-    "/namespaces/{namespace}/pods/{pod}/log": {
-      "get": {
-        "tags": [
-          "Pod"
-        ],
-        "summary": "Get pod logs.",
-        "operationId": "GetPodLogs",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "format": "string",
-            "name": "Upgrade",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "format": "string",
-            "name": "Connection",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "format": "string",
-            "name": "Sec-WebSocket-Key",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "integer",
-            "format": "int",
-            "name": "Sec-Websocket-Version",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "pod",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "follow",
-            "in": "query"
-          },
-          {
-            "type": "string",
-            "name": "tail",
-            "in": "query"
-          },
-          {
-            "type": "string",
-            "name": "container",
-            "in": "query"
-          },
-          {
-            "type": "string",
-            "name": "previous",
-            "in": "query"
-          }
-        ],
-        "responses": {
-          "101": {
-            "description": "pod logs"
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "public"
-      }
-    },
-    "/namespaces/{namespace}/secrets": {
-      "get": {
-        "tags": [
-          "Secret"
-        ],
-        "summary": "Get TLS secrets list.",
-        "operationId": "GetSecretList",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "docker",
-            "in": "query"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "secrets list",
-            "schema": {
-              "$ref": "#/definitions/SecretsList"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "public"
-      }
-    },
-    "/namespaces/{namespace}/secrets/docker": {
-      "post": {
-        "tags": [
-          "Secret"
-        ],
-        "summary": "Create secret.",
-        "operationId": "CreateDockerSecret",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/Secret"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "secret created",
-            "schema": {
-              "$ref": "#/definitions/Secret"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "private"
-      }
-    },
-    "/namespaces/{namespace}/secrets/tls": {
-      "post": {
-        "tags": [
-          "Secret"
-        ],
-        "summary": "Create secret.",
-        "operationId": "CreateTLSSecret",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/Secret"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "secret created",
-            "schema": {
-              "$ref": "#/definitions/Secret"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "private"
-      }
-    },
-    "/namespaces/{namespace}/secrets/{secret}": {
-      "get": {
-        "tags": [
-          "Secret"
-        ],
-        "summary": "Get secret.",
-        "operationId": "GetSecret",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "secret",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "secret",
-            "schema": {
-              "$ref": "#/definitions/Secret"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "public"
-      },
-      "put": {
-        "tags": [
-          "Secret"
-        ],
-        "summary": "Update secret.",
-        "operationId": "UpdateSecret",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "secret",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "docker",
-            "in": "query"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/Secret"
-            }
-          }
-        ],
-        "responses": {
-          "202": {
-            "description": "secret updated",
-            "schema": {
-              "$ref": "#/definitions/Secret"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "private"
-      },
-      "delete": {
-        "tags": [
-          "Secret"
-        ],
-        "summary": "Delete secret.",
-        "operationId": "DeleteSecret",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "secret",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "202": {
-            "description": "secret deleted"
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "public"
-      }
-    },
-    "/namespaces/{namespace}/services": {
-      "get": {
-        "tags": [
-          "Service"
-        ],
-        "summary": "Get services list.",
-        "operationId": "GetServiceList",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "services list",
-            "schema": {
-              "$ref": "#/definitions/ServicesList"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "public"
-      },
-      "post": {
-        "tags": [
-          "Service"
-        ],
-        "summary": "Create service.",
-        "operationId": "CreateService",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/ServiceWithParam"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "service created",
-            "schema": {
-              "$ref": "#/definitions/ServiceWithParam"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "private"
-      }
-    },
-    "/namespaces/{namespace}/services/{service}": {
-      "get": {
-        "tags": [
-          "Service"
-        ],
-        "summary": "Get services list.",
-        "operationId": "GetService",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "service",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "service",
-            "schema": {
-              "$ref": "#/definitions/ServiceWithParam"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "public"
-      },
-      "put": {
-        "tags": [
-          "Service"
-        ],
-        "summary": "Update service.",
-        "operationId": "UpdateService",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "service",
-            "in": "path",
-            "required": true
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/ServiceWithParam"
-            }
-          }
-        ],
-        "responses": {
-          "202": {
-            "description": "service updated",
-            "schema": {
-              "$ref": "#/definitions/ServiceWithParam"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "private"
-      },
-      "delete": {
-        "tags": [
-          "Service"
-        ],
-        "summary": "Delete service.",
-        "operationId": "DeleteService",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "service",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "202": {
-            "description": "service deleted"
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "public"
-      }
-    },
-    "/namespaces/{namespace}/solutions/{solution}/deployments": {
-      "get": {
-        "tags": [
-          "Deployment"
-        ],
-        "summary": "Get solution deployments list.",
-        "operationId": "GetDeploymentSolutionList",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "solution",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "deployments list",
-            "schema": {
-              "$ref": "#/definitions/DeploymentsList"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "public"
-      }
-    },
-    "/namespaces/{namespace}/solutions/{solution}/services": {
-      "get": {
-        "tags": [
-          "Service"
-        ],
-        "summary": "Get solution services list.",
-        "operationId": "GetServiceSolutionList",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "solution",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "services list",
-            "schema": {
-              "$ref": "#/definitions/ServicesList"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "public"
-      },
-      "delete": {
-        "tags": [
-          "Service"
-        ],
-        "summary": "Delete solution services.",
-        "operationId": "DeleteServicesSolution",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "solution",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "202": {
-            "description": "services deleted"
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "public"
-      }
-    },
-    "/namespaces/{namespace}/solutiosn/{solution}deployments": {
-      "delete": {
-        "tags": [
-          "Deployment"
-        ],
-        "summary": "Delete solution deployments.",
-        "operationId": "DeleteDeploymentsSolution",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "solution",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "202": {
-            "description": "deployments deleted"
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "private"
-      }
-    },
-    "/namespaces/{namespace}/volume": {
-      "post": {
-        "tags": [
-          "Volume"
-        ],
-        "summary": "Create volume.",
-        "operationId": "CreateVolume",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/Volume"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "volume created",
-            "schema": {
-              "$ref": "#/definitions/Volume"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "private"
-      }
-    },
-    "/namespaces/{namespace}/volume/{volume}": {
-      "delete": {
-        "tags": [
-          "Volume"
-        ],
-        "summary": "Delete volume.",
-        "operationId": "DeleteVolume",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "volume",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "202": {
-            "description": "volume deleted"
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "public"
-      }
-    },
-    "/namespaces/{namespace}/volumes": {
-      "get": {
-        "tags": [
-          "Volume"
-        ],
-        "summary": "Get volumes list.",
-        "operationId": "GetVolumeList",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "volumes list",
-            "schema": {
-              "$ref": "#/definitions/VolumesList"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "public"
-      }
-    },
-    "/namespaces/{namespace}/volumes/{volume}": {
-      "get": {
-        "tags": [
-          "Volume"
-        ],
-        "summary": "Get volumes list.",
-        "operationId": "GetVolume",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "volume",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "volume",
-            "schema": {
-              "$ref": "#/definitions/Volume"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "public"
-      },
-      "put": {
-        "tags": [
-          "Volume"
-        ],
-        "summary": "Update volume.",
-        "operationId": "UpdateVolume",
-        "parameters": [
-          {
-            "type": "string",
-            "format": "uuid",
-            "name": "X-User-ID",
-            "in": "header",
-            "required": true
-          },
-          {
-            "enum": [
-              "user",
-              "admin"
-            ],
-            "type": "string",
-            "name": "X-User-Role",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "X-User-Namespace",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "namespace",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "volume",
-            "in": "path",
-            "required": true
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/Volume"
-            }
-          }
-        ],
-        "responses": {
-          "202": {
-            "description": "volume updated",
-            "schema": {
-              "$ref": "#/definitions/Volume"
-            }
-          },
-          "default": {
-            "description": "cherry error",
-            "schema": {
-              "$ref": "#/definitions/errOAIGen"
-            }
-          }
-        },
-        "x-method-visibility": "private"
-      }
-    }
-  },
+  "paths": {},
   "definitions": {
     "AccessLevel": {
       "type": "string",
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
-    },
-    "AvailableSolution": {
-      "description": "AvailableSolution -- solution which user can run",
-      "type": "object",
-      "properties": {
-        "active": {
-          "type": "boolean",
-          "x-go-name": "Active"
-        },
-        "id": {
-          "type": "string",
-          "x-go-name": "ID"
-        },
-        "images": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "x-go-name": "Images"
-        },
-        "limits": {
-          "$ref": "#/definitions/SolutionLimits"
-        },
-        "name": {
-          "type": "string",
-          "x-go-name": "Name"
-        },
-        "url": {
-          "type": "string",
-          "x-go-name": "URL"
-        }
-      },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
-    },
-    "AvailableSolutionsList": {
-      "description": "AvailableSolutionsList -- list of available solutions",
-      "type": "object",
-      "properties": {
-        "solutions": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/AvailableSolution"
-          },
-          "x-go-name": "Solutions"
-        }
-      },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "ConfigFile": {
       "type": "object",
@@ -3371,7 +29,7 @@
           "x-go-name": "Type"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "ConfigMap": {
       "description": "ConfigMap -- model for config map",
@@ -3407,7 +65,7 @@
           "x-go-name": "Owner"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "ConfigMapData": {
       "description": "ConfigMapData -- model for config map data",
@@ -3415,7 +73,7 @@
       "additionalProperties": {
         "type": "string"
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "ConfigMapsList": {
       "description": "ConfigMapsList -- model for config maps list",
@@ -3429,7 +87,7 @@
           "x-go-name": "ConfigMaps"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "Container": {
       "description": "Container -- model for container in deployment",
@@ -3487,7 +145,7 @@
           "x-go-name": "VolumeMounts"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "ContainerPort": {
       "description": "ContainerPort -- model for port in container",
@@ -3511,7 +169,7 @@
           "$ref": "#/definitions/Protocol"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "ContainerVolume": {
       "description": "ContainerVolume -- volume (or config map) mounted in container",
@@ -3537,7 +195,7 @@
           "x-go-name": "SubPath"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "CreateVolume": {
       "description": "CreateVolume --",
@@ -3547,12 +205,16 @@
           "type": "string",
           "x-go-name": "Label"
         },
+        "storage": {
+          "type": "string",
+          "x-go-name": "Storage"
+        },
         "tariff_id": {
           "type": "string",
           "x-go-name": "TariffID"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "Deployment": {
       "description": "Deployment -- model for deployments",
@@ -3595,6 +257,10 @@
           "type": "string",
           "x-go-name": "Name"
         },
+        "namespace": {
+          "type": "string",
+          "x-go-name": "Namespace"
+        },
         "owner": {
           "type": "string",
           "x-go-name": "Owner"
@@ -3628,7 +294,7 @@
           "$ref": "#/definitions/Version"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "DeploymentStatus": {
       "description": "DeploymentStatus -- kubernetes status of deployment",
@@ -3660,7 +326,7 @@
           "x-go-name": "UpdatedReplicas"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "DeploymentVersion": {
       "description": "DeploymentVersion -- model for deployment version update",
@@ -3671,7 +337,7 @@
           "x-go-name": "Version"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "DeploymentsList": {
       "description": "DeploymentsList -- model for deployments list",
@@ -3685,7 +351,7 @@
           "x-go-name": "Deployments"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "Endpoint": {
       "description": "Endpoint -- model for endpoint",
@@ -3724,7 +390,7 @@
           "x-go-name": "Ports"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/git.containerum.net/ch/kube-api/pkg/model"
     },
     "EndpointsList": {
       "description": "EndpointsList -- model for endpoints list",
@@ -3738,7 +404,7 @@
           "x-go-name": "Endpoints"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/git.containerum.net/ch/kube-api/pkg/model"
     },
     "Env": {
       "description": "Env -- key-value pair of environment variables",
@@ -3757,7 +423,7 @@
           "x-go-name": "Value"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "Err": {
       "description": "Err -- standard serializable API error\nMessage -- constant error message:\n+ \"invalid username\"\n+ \"quota exceeded\"\n+ \"validation error\"\n...etc...\nID -- unique error identification code\nDetails -- optional context error messages kinda\n+ \"field 'Replicas' must be non-zero value\"\n+ \"not enough tights to feed gopher\"\n+ \"resource 'God' does't exist\"\nFields -- optional set of key-value pairs",
@@ -3786,7 +452,7 @@
           "x-go-name": "StatusHTTP"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/cherry"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/cherry"
     },
     "ErrID": {
       "description": "ErrID -- represents unique error ID",
@@ -3799,18 +465,18 @@
           "$ref": "#/definitions/ErrSID"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/cherry"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/cherry"
     },
     "ErrKind": {
       "description": "ErrKind -- represents kind of error",
       "type": "integer",
       "format": "uint64",
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/cherry"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/cherry"
     },
     "ErrSID": {
       "description": "ErrSID -- represents service ID of error",
       "type": "string",
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/cherry"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/cherry"
     },
     "Fields": {
       "description": "Fields -- represents additional key-value fields of error",
@@ -3818,7 +484,7 @@
       "additionalProperties": {
         "type": "string"
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/cherry"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/cherry"
     },
     "Image": {
       "type": "object",
@@ -3830,7 +496,55 @@
           "type": "string"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
+    },
+    "ImportResponse": {
+      "description": "ImportResponse -- response after resources import",
+      "type": "object",
+      "properties": {
+        "failed": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ImportResult"
+          },
+          "x-go-name": "Failed"
+        },
+        "imported": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ImportResult"
+          },
+          "x-go-name": "Imported"
+        }
+      },
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
+    },
+    "ImportResponseTotal": {
+      "description": "ImportResponseTotal -- import response for all services",
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/ImportResponse"
+      },
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
+    },
+    "ImportResult": {
+      "description": "ImportResult -- import result for one resource",
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "x-go-name": "Message"
+        },
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "namespace": {
+          "type": "string",
+          "x-go-name": "Namespace"
+        }
+      },
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "Ingress": {
       "description": "Ingress -- model for ingress",
@@ -3870,7 +584,7 @@
           "x-go-name": "Rules"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "IngressesList": {
       "description": "IngressesList -- model for ingresses list",
@@ -3884,7 +598,7 @@
           "x-go-name": "Ingress"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "Namespace": {
       "description": "Namespace -- namespace representation",
@@ -3948,7 +662,7 @@
           "x-go-name": "Users"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "NamespacesList": {
       "description": "NamespacesList -- model for namespaces list",
@@ -3962,7 +676,7 @@
           "x-go-name": "Namespaces"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "PRVersion": {
       "description": "PRVersion represents a PreRelease Version",
@@ -3979,7 +693,7 @@
           "type": "string"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/blang/semver"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/blang/semver"
     },
     "Path": {
       "description": "Path -- ingress path",
@@ -4004,11 +718,11 @@
           "x-go-name": "ServicePort"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "PersistentVolumeAccessMode": {
       "type": "string",
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "Pod": {
       "description": "Pod -- model for pod",
@@ -4061,7 +775,7 @@
           "x-go-name": "TotalMemory"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "PodStatus": {
       "description": "PodStatus -- kubernetes status of pod",
@@ -4082,7 +796,7 @@
           "x-go-name": "StartAt"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "PodsList": {
       "description": "PodsList -- model for pods list",
@@ -4096,7 +810,7 @@
           "x-go-name": "Pods"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "Port": {
       "description": "Port -- model for endpoint port",
@@ -4120,12 +834,12 @@
           "$ref": "#/definitions/Protocol"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/git.containerum.net/ch/kube-api/pkg/model"
     },
     "Protocol": {
       "description": "represents port protocol type (TCP or UDP)",
       "type": "string",
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "Resource": {
       "description": "Resource -- represents namespace CPU and RAM",
@@ -4148,7 +862,7 @@
           "x-go-name": "Memory"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "ResourceUpdateName": {
       "description": "ResourceUpdateName -- contains new resource name",
@@ -4159,7 +873,7 @@
           "x-go-name": "Label"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "ResourceUpdateUserAccess": {
       "description": "ResourceUpdateUserAccess -- contains user access data",
@@ -4173,7 +887,7 @@
           "x-go-name": "Username"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "Resources": {
       "type": "object",
@@ -4189,7 +903,7 @@
           "$ref": "#/definitions/Resource"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "Rule": {
       "description": "Rule -- ingress rule",
@@ -4215,7 +929,7 @@
           "x-go-name": "TLSSecret"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "RunSolutionResponse": {
       "description": "RunSolutionResponse -- response to run solution request",
@@ -4239,7 +953,7 @@
           "x-go-name": "NotCreated"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "Secret": {
       "description": "model for secret",
@@ -4270,12 +984,16 @@
           "type": "string",
           "x-go-name": "Name"
         },
+        "namespace": {
+          "type": "string",
+          "x-go-name": "Namespace"
+        },
         "owner": {
           "type": "string",
           "x-go-name": "Owner"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "SecretsList": {
       "description": "SecretsList -- model for secrets list",
@@ -4289,7 +1007,7 @@
           "x-go-name": "Secrets"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "SelectedConfigMapsList": {
       "description": "SelectedConfigMapsList -- model for config maps list from all namespaces",
@@ -4297,7 +1015,7 @@
       "additionalProperties": {
         "$ref": "#/definitions/ConfigMapsList"
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "SelectedIngressesList": {
       "description": "SelectedIngressesList -- model for ingresses list from all namespaces",
@@ -4305,7 +1023,7 @@
       "additionalProperties": {
         "$ref": "#/definitions/IngressesList"
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "Service": {
       "description": "represents service",
@@ -4344,6 +1062,10 @@
           "type": "string",
           "x-go-name": "Name"
         },
+        "namespace": {
+          "type": "string",
+          "x-go-name": "Namespace"
+        },
         "owner": {
           "type": "string",
           "x-go-name": "Owner"
@@ -4361,7 +1083,7 @@
           "x-go-name": "SolutionID"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "ServicePort": {
       "description": "represent service port",
@@ -4390,12 +1112,12 @@
           "x-go-name": "TargetPort"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "ServiceType": {
       "description": "represents service type",
       "type": "string",
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "ServiceWithParam": {
       "description": "ServiceWithParam -- model for service with owner",
@@ -4439,6 +1161,10 @@
           "type": "string",
           "x-go-name": "Name"
         },
+        "namespace": {
+          "type": "string",
+          "x-go-name": "Namespace"
+        },
         "owner": {
           "type": "string",
           "x-go-name": "Owner"
@@ -4456,7 +1182,7 @@
           "x-go-name": "SolutionID"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/git.containerum.net/ch/kube-api/pkg/model"
     },
     "ServiceWithParamList": {
       "description": "ServiceWithParamList -- model for services list",
@@ -4470,7 +1196,7 @@
           "x-go-name": "Services"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/git.containerum.net/ch/kube-api/pkg/model"
     },
     "ServicesList": {
       "description": "ServicesList -- model for services list",
@@ -4484,7 +1210,50 @@
           "x-go-name": "Services"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
+    },
+    "Solution": {
+      "description": "Solution -- running solution",
+      "type": "object",
+      "required": [
+        "template",
+        "name",
+        "namespace"
+      ],
+      "properties": {
+        "branch": {
+          "type": "string",
+          "x-go-name": "Branch"
+        },
+        "env": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "Env"
+        },
+        "id": {
+          "type": "string",
+          "x-go-name": "ID"
+        },
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "namespace": {
+          "type": "string",
+          "x-go-name": "Namespace"
+        },
+        "template": {
+          "type": "string",
+          "x-go-name": "Template"
+        },
+        "url": {
+          "type": "string",
+          "x-go-name": "URL"
+        }
+      },
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "SolutionEnv": {
       "description": "SolutionEnv -- solution environment variables",
@@ -4498,22 +1267,24 @@
           "x-go-name": "Env"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "SolutionLimits": {
       "description": "SolutionLimits -- solution resources limits",
       "type": "object",
       "properties": {
         "cpu": {
-          "type": "string",
+          "type": "integer",
+          "format": "uint64",
           "x-go-name": "CPU"
         },
         "ram": {
-          "type": "string",
+          "type": "integer",
+          "format": "uint64",
           "x-go-name": "RAM"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "SolutionResources": {
       "description": "SolutionResources -- list of solution resources",
@@ -4528,7 +1299,68 @@
           "x-go-name": "Resources"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
+    },
+    "SolutionTemplate": {
+      "description": "SolutionTemplate -- solution which user can run",
+      "type": "object",
+      "properties": {
+        "active": {
+          "type": "boolean",
+          "x-go-name": "Active"
+        },
+        "id": {
+          "type": "string",
+          "x-go-name": "ID"
+        },
+        "images": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Images"
+        },
+        "limits": {
+          "$ref": "#/definitions/SolutionLimits"
+        },
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "url": {
+          "type": "string",
+          "x-go-name": "URL"
+        }
+      },
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
+    },
+    "SolutionsList": {
+      "description": "SolutionsList -- list of running solution",
+      "type": "object",
+      "properties": {
+        "solutions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Solution"
+          },
+          "x-go-name": "Solutions"
+        }
+      },
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
+    },
+    "SolutionsTemplatesList": {
+      "description": "SolutionsTemplatesList -- list of available solutions",
+      "type": "object",
+      "properties": {
+        "solutions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SolutionTemplate"
+          },
+          "x-go-name": "Solutions"
+        }
+      },
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "UpdateImage": {
       "description": "UpdateImage -- model for update container image request",
@@ -4547,7 +1379,7 @@
           "x-go-name": "Image"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "UpdateNamespaceName": {
       "description": "UpdateNamespaceName -- contains new namespace label",
@@ -4561,7 +1393,7 @@
           "x-go-name": "Label"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "UpdateReplicas": {
       "description": "UpdateReplicas -- contains new number of replicas",
@@ -4576,7 +1408,7 @@
           "x-go-name": "Replicas"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "UserAccess": {
       "type": "object",
@@ -4589,7 +1421,7 @@
           "x-go-name": "Username"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "UserGroup": {
       "description": "UserGroup -- group of users",
@@ -4632,11 +1464,11 @@
           "x-go-name": "OwnerID"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "UserGroupAccess": {
       "type": "string",
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "UserGroupMember": {
       "description": "UserGroupMember -- group member",
@@ -4654,7 +1486,7 @@
           "x-go-name": "Username"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "UserGroupMembers": {
       "description": "UserGroupMembers -- list of user group members",
@@ -4668,7 +1500,7 @@
           "x-go-name": "Members"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "UserGroups": {
       "description": "UserGroups -- list of user groups",
@@ -4682,7 +1514,7 @@
           "x-go-name": "Groups"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "UserHeaderData": {
       "description": "represents header data for X-User-Namespace and X-User-Volume headers (encoded in base64)",
@@ -4707,64 +1539,7 @@
           "x-go-name": "Label"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
-    },
-    "UserSolution": {
-      "description": "UserSolution -- running solution",
-      "type": "object",
-      "required": [
-        "template",
-        "name",
-        "namespace"
-      ],
-      "properties": {
-        "branch": {
-          "type": "string",
-          "x-go-name": "Branch"
-        },
-        "env": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          },
-          "x-go-name": "Env"
-        },
-        "id": {
-          "type": "string",
-          "x-go-name": "ID"
-        },
-        "name": {
-          "type": "string",
-          "x-go-name": "Name"
-        },
-        "namespace": {
-          "type": "string",
-          "x-go-name": "Namespace"
-        },
-        "template": {
-          "type": "string",
-          "x-go-name": "Template"
-        },
-        "url": {
-          "type": "string",
-          "x-go-name": "URL"
-        }
-      },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
-    },
-    "UserSolutionsList": {
-      "description": "UserSolutionsList -- list of running solution",
-      "type": "object",
-      "properties": {
-        "solutions": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/UserSolution"
-          },
-          "x-go-name": "Solutions"
-        }
-      },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "Version": {
       "description": "Version represents a semver compatible version",
@@ -4795,7 +1570,7 @@
           }
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/blang/semver"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/blang/semver"
     },
     "Volume": {
       "description": "Volume -- volume representation",
@@ -4824,6 +1599,10 @@
         "name": {
           "type": "string",
           "x-go-name": "Name"
+        },
+        "namespace": {
+          "type": "string",
+          "x-go-name": "Namespace"
         },
         "owner": {
           "type": "string",
@@ -4854,7 +1633,7 @@
           "x-go-name": "Users"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
     "VolumesList": {
       "description": "VolumesList -- model for volumes list",
@@ -4868,60 +1647,7 @@
           "x-go-name": "Volumes"
         }
       },
-      "x-go-package": "git.containerum.net/ch/kube-api/vendor/github.com/containerum/kube-client/pkg/model"
-    },
-    "errOAIGen": {
-      "description": "Err -- standard serializable API error\nMessage -- constant error message:\n+ \"invalid username\"\n+ \"quota exceeded\"\n+ \"validation error\"\n...etc...\nID -- unique error identification code\nDetails -- optional context error messages kinda\n+ \"field 'Replicas' must be non-zero value\"\n+ \"not enough tights to feed gopher\"\n+ \"resource 'God' does't exist\"\nFields -- optional set of key-value pairs",
-      "type": "object",
-      "properties": {
-        "details": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "x-go-name": "Details"
-        },
-        "fields": {
-          "description": "Fields -- represents additional key-value fields of error",
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          },
-          "x-go-package": "github.com/containerum/cherry"
-        },
-        "id": {
-          "$ref": "#/definitions/errOaiGenId"
-        },
-        "message": {
-          "type": "string",
-          "x-go-name": "Message"
-        },
-        "status_http": {
-          "type": "integer",
-          "format": "int64",
-          "x-go-name": "StatusHTTP"
-        }
-      },
-      "x-go-package": "github.com/containerum/cherry"
-    },
-    "errOaiGenId": {
-      "description": "ErrID -- represents unique error ID",
-      "type": "object",
-      "properties": {
-        "kind": {
-          "description": "ErrKind -- represents kind of error",
-          "type": "integer",
-          "format": "uint64",
-          "x-go-package": "github.com/containerum/cherry"
-        },
-        "sid": {
-          "description": "ErrSID -- represents service ID of error",
-          "type": "string",
-          "x-go-package": "github.com/containerum/cherry"
-        }
-      },
-      "x-go-gen-location": "models",
-      "x-go-package": "github.com/containerum/cherry"
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     }
   },
   "parameters": {
@@ -4981,7 +1707,53 @@
     "error": {
       "description": "cherry error",
       "schema": {
-        "$ref": "#/definitions/errOAIGen"
+        "description": "Err -- standard serializable API error\nMessage -- constant error message:\n+ \"invalid username\"\n+ \"quota exceeded\"\n+ \"validation error\"\n...etc...\nID -- unique error identification code\nDetails -- optional context error messages kinda\n+ \"field 'Replicas' must be non-zero value\"\n+ \"not enough tights to feed gopher\"\n+ \"resource 'God' does't exist\"\nFields -- optional set of key-value pairs",
+        "type": "object",
+        "properties": {
+          "details": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "x-go-name": "Details"
+          },
+          "fields": {
+            "description": "Fields -- represents additional key-value fields of error",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "x-go-package": "github.com/containerum/cherry"
+          },
+          "id": {
+            "description": "ErrID -- represents unique error ID",
+            "type": "object",
+            "properties": {
+              "kind": {
+                "description": "ErrKind -- represents kind of error",
+                "type": "integer",
+                "format": "uint64",
+                "x-go-package": "github.com/containerum/cherry"
+              },
+              "sid": {
+                "description": "ErrSID -- represents service ID of error",
+                "type": "string",
+                "x-go-package": "github.com/containerum/cherry"
+              }
+            },
+            "x-go-package": "github.com/containerum/cherry"
+          },
+          "message": {
+            "type": "string",
+            "x-go-name": "Message"
+          },
+          "status_http": {
+            "type": "integer",
+            "format": "int64",
+            "x-go-name": "StatusHTTP"
+          }
+        },
+        "x-go-package": "github.com/containerum/cherry"
       }
     }
   }
