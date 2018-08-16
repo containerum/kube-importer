@@ -18,13 +18,13 @@ import (
 
 // Resource is an interface to resource service
 type Resource interface {
-	ImportDeployments(ctx context.Context, deploy kubtypes.DeploymentsList) error
+	ImportDeployments(ctx context.Context, deploy kubtypes.DeploymentsList) (*kubtypes.ImportResponse, error)
 
-	ImportServices(ctx context.Context, service model.ServiceWithParamList) error
+	ImportServices(ctx context.Context, service model.ServiceWithParamList) (*kubtypes.ImportResponse, error)
 
-	ImportIngresses(ctx context.Context, ingress kubtypes.IngressesList) error
+	ImportIngresses(ctx context.Context, ingress kubtypes.IngressesList) (*kubtypes.ImportResponse, error)
 
-	ImportConfigMaps(ctx context.Context, cm kubtypes.ConfigMapsList) error
+	ImportConfigMaps(ctx context.Context, cm kubtypes.ConfigMapsList) (*kubtypes.ImportResponse, error)
 }
 
 type resc struct {
@@ -52,72 +52,80 @@ func NewResourceHTTP(u *url.URL) Resource {
 	}
 }
 
-func (res resc) ImportDeployments(ctx context.Context, deploy kubtypes.DeploymentsList) error {
+func (res resc) ImportDeployments(ctx context.Context, deploy kubtypes.DeploymentsList) (*kubtypes.ImportResponse, error) {
 	res.log.Debugln("import deployments")
 	coblog.Std.Struct(deploy)
 
+	var ret kubtypes.ImportResponse
 	resp, err := res.client.R().
 		SetBody(deploy).
 		SetContext(ctx).
+		SetResult(&ret).
 		Post("/import/deployments")
 	if err != nil {
-		return kierrors.ErrInternalError().Log(err, res.log)
+		return nil, kierrors.ErrInternalError().Log(err, res.log)
 	}
 	if resp.Error() != nil {
-		return resp.Error().(*cherry.Err)
+		return nil, resp.Error().(*cherry.Err)
 	}
-	return nil
+	return &ret, nil
 }
 
-func (res resc) ImportServices(ctx context.Context, svc model.ServiceWithParamList) error {
+func (res resc) ImportServices(ctx context.Context, svc model.ServiceWithParamList) (*kubtypes.ImportResponse, error) {
 	res.log.Debugln("import services")
 	coblog.Std.Struct(svc)
 
+	var ret kubtypes.ImportResponse
 	resp, err := res.client.R().
 		SetBody(svc).
 		SetContext(ctx).
+		SetResult(&ret).
 		Post("/import/services")
 	if err != nil {
-		return kierrors.ErrInternalError().Log(err, res.log)
+		return nil, kierrors.ErrInternalError().Log(err, res.log)
 	}
 	if resp.Error() != nil {
-		return resp.Error().(*cherry.Err)
+		return nil, resp.Error().(*cherry.Err)
 	}
-	return nil
+	return &ret, nil
 }
 
-func (res resc) ImportIngresses(ctx context.Context, ingr kubtypes.IngressesList) error {
+func (res resc) ImportIngresses(ctx context.Context, ingr kubtypes.IngressesList) (*kubtypes.ImportResponse, error) {
 	res.log.Debugln("import ingresses")
 	coblog.Std.Struct(ingr)
 
+	var ret kubtypes.ImportResponse
 	resp, err := res.client.R().
 		SetBody(ingr).
 		SetContext(ctx).
+		SetResult(&ret).
 		Post("/import/ingresses")
 	if err != nil {
-		return kierrors.ErrInternalError().Log(err, res.log)
+		return nil, kierrors.ErrInternalError().Log(err, res.log)
 	}
 	if resp.Error() != nil {
-		return resp.Error().(*cherry.Err)
+		return nil, resp.Error().(*cherry.Err)
 	}
-	return nil
+	return &ret, nil
 }
 
-func (res resc) ImportConfigMaps(ctx context.Context, cm kubtypes.ConfigMapsList) error {
+func (res resc) ImportConfigMaps(ctx context.Context, cm kubtypes.ConfigMapsList) (*kubtypes.ImportResponse, error) {
 	res.log.Debugln("import config maps")
 	coblog.Std.Struct(cm)
 
+	var ret kubtypes.ImportResponse
 	resp, err := res.client.R().
 		SetBody(cm).
 		SetContext(ctx).
+		SetResult(&ret).
 		Post("/import/configmaps")
 	if err != nil {
-		return kierrors.ErrInternalError().Log(err, res.log)
+		return nil, kierrors.ErrInternalError().Log(err, res.log)
 	}
 	if resp.Error() != nil {
-		return resp.Error().(*cherry.Err)
+		return nil, resp.Error().(*cherry.Err)
 	}
-	return nil
+	return &ret, nil
 }
 
 func (res resc) String() string {
@@ -135,32 +143,32 @@ func NewDummyResource() Resource {
 	return rescDummy{log: logrus.WithField("component", "resource_client_dummy")}
 }
 
-func (res rescDummy) ImportDeployments(ctx context.Context, deploy kubtypes.DeploymentsList) error {
+func (res rescDummy) ImportDeployments(ctx context.Context, deploy kubtypes.DeploymentsList) (*kubtypes.ImportResponse, error) {
 	res.log.Debugln("import deployments")
 	coblog.Std.Struct(deploy)
 
-	return nil
+	return nil, nil
 }
 
-func (res rescDummy) ImportServices(ctx context.Context, svc model.ServiceWithParamList) error {
+func (res rescDummy) ImportServices(ctx context.Context, svc model.ServiceWithParamList) (*kubtypes.ImportResponse, error) {
 	res.log.Debugln("import services")
 	coblog.Std.Struct(svc)
 
-	return nil
+	return nil, nil
 }
 
-func (res rescDummy) ImportIngresses(ctx context.Context, ingr kubtypes.IngressesList) error {
+func (res rescDummy) ImportIngresses(ctx context.Context, ingr kubtypes.IngressesList) (*kubtypes.ImportResponse, error) {
 	res.log.Debugln("import ingresses")
 	coblog.Std.Struct(ingr)
 
-	return nil
+	return nil, nil
 }
 
-func (res rescDummy) ImportConfigMaps(ctx context.Context, cm kubtypes.ConfigMapsList) error {
+func (res rescDummy) ImportConfigMaps(ctx context.Context, cm kubtypes.ConfigMapsList) (*kubtypes.ImportResponse, error) {
 	res.log.Debugln("import config maps")
 	coblog.Std.Struct(cm)
 
-	return nil
+	return nil, nil
 }
 
 func (rescDummy) String() string {

@@ -17,7 +17,7 @@ import (
 
 // Permissions is an interface to permissions service
 type Permissions interface {
-	ImportNamespaces(ctx context.Context, ns kubtypes.NamespacesList) error
+	ImportNamespaces(ctx context.Context, ns kubtypes.NamespacesList) (*kubtypes.ImportResponse, error)
 }
 
 type permc struct {
@@ -45,21 +45,23 @@ func NewPermissionsHTTP(u *url.URL) Permissions {
 	}
 }
 
-func (perm permc) ImportNamespaces(ctx context.Context, ns kubtypes.NamespacesList) error {
+func (perm permc) ImportNamespaces(ctx context.Context, ns kubtypes.NamespacesList) (*kubtypes.ImportResponse, error) {
 	perm.log.Debugln("import namespaces")
 	coblog.Std.Struct(ns)
 
+	var ret kubtypes.ImportResponse
 	resp, err := perm.client.R().
 		SetBody(ns).
 		SetContext(ctx).
+		SetResult(&ret).
 		Post("/import/namespaces")
 	if err != nil {
-		return kierrors.ErrInternalError().Log(err, perm.log)
+		return nil, kierrors.ErrInternalError().Log(err, perm.log)
 	}
 	if resp.Error() != nil {
-		return resp.Error().(*cherry.Err)
+		return nil, resp.Error().(*cherry.Err)
 	}
-	return nil
+	return &ret, nil
 }
 
 func (perm permc) String() string {
@@ -77,11 +79,11 @@ func NewDummyPermissions() Permissions {
 	return permcDummy{log: logrus.WithField("component", "permissions_client_dummy")}
 }
 
-func (perm permcDummy) ImportNamespaces(ctx context.Context, ns kubtypes.NamespacesList) error {
+func (perm permcDummy) ImportNamespaces(ctx context.Context, ns kubtypes.NamespacesList) (*kubtypes.ImportResponse, error) {
 	perm.log.Debugln("import namespaces")
 	coblog.Std.Struct(ns)
 
-	return nil
+	return nil, nil
 }
 
 func (permcDummy) String() string {

@@ -3,16 +3,23 @@
 
 [[projects]]
   branch = "develop"
-  digest = "1:2e380c0100f7b1330cdabd65da18f37f6533e23858f1f020b1cc2191fae35d80"
+  digest = "1:7644dc2457f1ef14e18938deefd5030b27d6615ca006cfceead88408700ddbdc"
   name = "git.containerum.net/ch/kube-api"
   packages = [
     "pkg/kubeerrors",
     "pkg/kubernetes",
     "pkg/model",
-    "pkg/router/midlleware",
   ]
   pruneopts = "NUT"
   revision = "4b490c800f1b0b4a221cc762d73a73c8fd142752"
+
+[[projects]]
+  branch = "develop"
+  digest = "1:fd7a20009d086727b6c15853865f29493482f9b77b4a35279ba2e0d35d89c472"
+  name = "git.containerum.net/ch/resource-service"
+  packages = ["pkg/util/coblog"]
+  pruneopts = "NUT"
+  revision = "9ce55ef2ff465327e49c5d8ccd6e8a0ae129068e"
 
 [[projects]]
   digest = "1:d8ebbd207f3d3266d4423ce4860c9f3794956306ded6c7ba312ecc69cdfbf04c"
@@ -51,15 +58,15 @@
   version = "v1.0.2"
 
 [[projects]]
-  digest = "1:d652ab42537fde5cee32c1ef80660df9befcd9a3f080d333a0b998e586b6e30f"
+  digest = "1:5eba59b0e19d7727e7e4294c7435cbde6e38a396b20dd47738600380e7569428"
   name = "github.com/containerum/kube-client"
   packages = [
     ".",
     "pkg/model",
   ]
   pruneopts = "UT"
-  revision = "972c4f252587d8d783aba690c36237d94f4e7715"
-  version = "v0.23.23"
+  revision = "23dd0850d05cd21c41f0699fced4c5791dea2df6"
+  version = "v0.23.26"
 
 [[projects]]
   digest = "1:f332cfcc393a262145934ed77269e485c04987ca5ed836c6937e36147d3103d5"
@@ -196,6 +203,14 @@
   pruneopts = "NUT"
   revision = "b32fa301c9fe55953584134cb6853a13c87ec0a1"
   version = "v0.16.0"
+
+[[projects]]
+  digest = "1:ed6fe3cdb5ccb17387b5cb11c0cbd125699f5f5d23626ccf78a7c5859183e063"
+  name = "github.com/go-resty/resty"
+  packages = ["."]
+  pruneopts = "NUT"
+  revision = "97a15579492cd5f35632499f315d7a8df94160a1"
+  version = "v1.8.0"
 
 [[projects]]
   digest = "1:8679b8a64f3613e9749c5640c3535c83399b8e69f67ce54d91dc73f6d77373af"
@@ -354,6 +369,14 @@
   version = "v0.3.7"
 
 [[projects]]
+  digest = "1:c17f50b4ccbba568a6fc10b06a24bb8ac99077470fd48a905759f9914d631dd7"
+  name = "github.com/oleiade/reflections"
+  packages = ["."]
+  pruneopts = "NUT"
+  revision = "2b6ec3da648e3e834dc41bad8d9ed7f2dc6a9496"
+  version = "v1.0.0"
+
+[[projects]]
   branch = "master"
   digest = "1:3bf17a6e6eaa6ad24152148a631d18662f7212e21637c2699bff3369b7f00fa2"
   name = "github.com/petar/GoLLRB"
@@ -411,7 +434,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:30080e3b16960b76f9cac9bbd943a608f55fb3aeb58a02f6da7c2c82afc26ea7"
+  digest = "1:62d70065904aaebfef72137adaf567f31da141ce3a2af75ddb3664df90cbc2de"
   name = "golang.org/x/net"
   packages = [
     "context",
@@ -419,6 +442,7 @@
     "http2",
     "http2/hpack",
     "idna",
+    "publicsuffix",
     "webdav",
     "webdav/internal/xml",
   ]
@@ -427,14 +451,14 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:89ad83167492e9810168f2feca808ec4134321d61223b3ae1520134a9a1ef283"
+  digest = "1:51bfac9fe01b6a949bfed6db70b00bada281f0d64e5296ec644163aa977bfee0"
   name = "golang.org/x/sys"
   packages = [
     "unix",
     "windows",
   ]
   pruneopts = "NUT"
-  revision = "4e1fef5609515ec7a2cee7b5de30ba6d9b438cbf"
+  revision = "1c9583448a9c3aa0f9a6a5241bf73c0bd8aafded"
 
 [[projects]]
   digest = "1:e33513a825fcd765e97b5de639a2f7547542d1a8245df0cef18e1fd390b778a9"
@@ -655,9 +679,10 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "git.containerum.net/ch/kube-api/pkg/kubeerrors",
     "git.containerum.net/ch/kube-api/pkg/kubernetes",
     "git.containerum.net/ch/kube-api/pkg/model",
-    "git.containerum.net/ch/kube-api/pkg/router/midlleware",
+    "git.containerum.net/ch/resource-service/pkg/util/coblog",
     "github.com/containerum/cherry",
     "github.com/containerum/cherry/adaptors/cherrylog",
     "github.com/containerum/cherry/adaptors/gonic",
@@ -667,6 +692,8 @@
     "github.com/gin-contrib/cors",
     "github.com/gin-gonic/contrib/ginrus",
     "github.com/gin-gonic/gin",
+    "github.com/go-resty/resty",
+    "github.com/json-iterator/go",
     "github.com/sirupsen/logrus",
     "github.com/urfave/cli",
     "golang.org/x/net/webdav",

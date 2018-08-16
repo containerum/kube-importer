@@ -18,8 +18,8 @@ import (
 
 // Volumes is an interface to resc-api service
 type Volumes interface {
-	ImportStorages(ctx context.Context, storages model.StorageList) error
-	ImportVolumes(ctx context.Context, volumes kubtypes.VolumesList) error
+	ImportStorages(ctx context.Context, storages model.StorageList) (*kubtypes.ImportResponse, error)
+	ImportVolumes(ctx context.Context, volumes kubtypes.VolumesList) (*kubtypes.ImportResponse, error)
 }
 
 type volc struct {
@@ -47,38 +47,42 @@ func NewVolumesHTTP(u *url.URL) Volumes {
 	}
 }
 
-func (vol volc) ImportStorages(ctx context.Context, storages model.StorageList) error {
+func (vol volc) ImportStorages(ctx context.Context, storages model.StorageList) (*kubtypes.ImportResponse, error) {
 	vol.log.Debugln("import storages")
 	coblog.Std.Debugln(storages)
 
+	var ret kubtypes.ImportResponse
 	resp, err := vol.client.R().
 		SetBody(storages).
 		SetContext(ctx).
+		SetResult(&ret).
 		Post("/import/storages")
 	if err != nil {
-		return kierrors.ErrInternalError().Log(err, vol.log)
+		return nil, kierrors.ErrInternalError().Log(err, vol.log)
 	}
 	if resp.Error() != nil {
-		return resp.Error().(*cherry.Err)
+		return nil, resp.Error().(*cherry.Err)
 	}
-	return nil
+	return &ret, nil
 }
 
-func (vol volc) ImportVolumes(ctx context.Context, volumes kubtypes.VolumesList) error {
+func (vol volc) ImportVolumes(ctx context.Context, volumes kubtypes.VolumesList) (*kubtypes.ImportResponse, error) {
 	vol.log.Debugln("import volumes")
 	coblog.Std.Struct(volumes)
 
+	var ret kubtypes.ImportResponse
 	resp, err := vol.client.R().
 		SetBody(volumes).
 		SetContext(ctx).
+		SetResult(&ret).
 		Post("/import/volumes")
 	if err != nil {
-		return kierrors.ErrInternalError().Log(err, vol.log)
+		return nil, kierrors.ErrInternalError().Log(err, vol.log)
 	}
 	if resp.Error() != nil {
-		return resp.Error().(*cherry.Err)
+		return nil, resp.Error().(*cherry.Err)
 	}
-	return nil
+	return &ret, nil
 }
 
 func (vol volc) String() string {
@@ -96,18 +100,18 @@ func NewDummyVolumes() Volumes {
 	return volcDummy{log: logrus.WithField("component", "volumes_client_dummy")}
 }
 
-func (vol volcDummy) ImportStorages(ctx context.Context, storages model.StorageList) error {
+func (vol volcDummy) ImportStorages(ctx context.Context, storages model.StorageList) (*kubtypes.ImportResponse, error) {
 	vol.log.Debugln("import storages")
 	coblog.Std.Debugln(storages)
 
-	return nil
+	return nil, nil
 }
 
-func (vol volcDummy) ImportVolumes(ctx context.Context, volumes kubtypes.VolumesList) error {
+func (vol volcDummy) ImportVolumes(ctx context.Context, volumes kubtypes.VolumesList) (*kubtypes.ImportResponse, error) {
 	vol.log.Debugln("import volumes")
 	coblog.Std.Struct(volumes)
 
-	return nil
+	return nil, nil
 }
 
 func (volcDummy) String() string {
