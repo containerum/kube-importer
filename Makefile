@@ -1,7 +1,7 @@
 .PHONY: build test clean release single_release
 
-CMD_DIR:=cmd/kube-api
-CLI_DIR:=cmd/kube-api
+CMD_DIR:=cmd/kube-importer
+CLI_DIR:=cmd/kube-importer
 #get current package, assuming it`s in GOPATH sources
 PACKAGE := $(shell go list -f '{{.ImportPath}}' ./$(CLI_DIR))
 PACKAGE := $(PACKAGE:%/$(CLI_DIR)=%)
@@ -14,12 +14,12 @@ VERSION?=$(LATEST_TAG:v%=%)
 
 # make directory and store path to variable
 BUILDS_DIR:=$(PWD)/build
-EXECUTABLE:=kube-api
+EXECUTABLE:=kube-importer
 LDFLAGS=-X '$(PACKAGE)/$(CLI_DIR).VERSION=v$(VERSION)'
 
 # go has build artifacts caching so soruce tracking not needed
 build:
-	@echo "Building kube-api for current OS/architecture"
+	@echo "Building kube-importer for current OS/architecture"
 	@go build -v -ldflags="$(LDFLAGS)" -o $(BUILDS_DIR)/$(EXECUTABLE) ./$(CMD_DIR)
 
 test:
