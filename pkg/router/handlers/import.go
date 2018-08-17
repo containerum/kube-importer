@@ -271,7 +271,7 @@ func ImportAllHandler(ctx *gin.Context) {
 var upgrader = websocket.Upgrader{}
 
 // swagger:operation GET /all/ws Import ImportAllWS
-// Import all resources with websockets responce.
+// Import all resources with websockets response.
 //
 // ---
 // x-method-visibility: public

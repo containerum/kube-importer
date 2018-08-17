@@ -27,7 +27,10 @@
             }
           },
           "default": {
-            "$ref": "#/responses/error"
+            "description": "cherry error",
+            "schema": {
+              "$ref": "#/definitions/importAllHandlerDefaultBody"
+            }
           }
         },
         "x-method-visibility": "public"
@@ -38,20 +41,36 @@
         "tags": [
           "Import"
         ],
-        "summary": "Import all resources with websockets responce.",
+        "summary": "Import all resources with websockets response.",
         "operationId": "ImportAllWS",
         "parameters": [
           {
-            "$ref": "#/parameters/UpgradeHeader"
+            "type": "string",
+            "format": "string",
+            "name": "Upgrade",
+            "in": "header",
+            "required": true
           },
           {
-            "$ref": "#/parameters/ConnectionHeader"
+            "type": "string",
+            "format": "string",
+            "name": "Connection",
+            "in": "header",
+            "required": true
           },
           {
-            "$ref": "#/parameters/SecWebSocketKeyHeader"
+            "type": "string",
+            "format": "string",
+            "name": "Sec-WebSocket-Key",
+            "in": "header",
+            "required": true
           },
           {
-            "$ref": "#/parameters/SecWebsocketVersionHeader"
+            "type": "integer",
+            "format": "int",
+            "name": "Sec-Websocket-Version",
+            "in": "header",
+            "required": true
           }
         ],
         "responses": {
@@ -59,7 +78,10 @@
             "description": "import response"
           },
           "default": {
-            "$ref": "#/responses/error"
+            "description": "cherry error",
+            "schema": {
+              "$ref": "#/definitions/importAllHandlerDefaultBody"
+            }
           }
         },
         "x-method-visibility": "public"
@@ -80,7 +102,10 @@
             }
           },
           "default": {
-            "$ref": "#/responses/error"
+            "description": "cherry error",
+            "schema": {
+              "$ref": "#/definitions/importAllHandlerDefaultBody"
+            }
           }
         },
         "x-method-visibility": "public"
@@ -99,7 +124,10 @@
             }
           },
           "default": {
-            "$ref": "#/responses/error"
+            "description": "cherry error",
+            "schema": {
+              "$ref": "#/definitions/importAllHandlerDefaultBody"
+            }
           }
         },
         "x-method-visibility": "public"
@@ -120,7 +148,10 @@
             }
           },
           "default": {
-            "$ref": "#/responses/error"
+            "description": "cherry error",
+            "schema": {
+              "$ref": "#/definitions/importAllHandlerDefaultBody"
+            }
           }
         },
         "x-method-visibility": "public"
@@ -139,7 +170,10 @@
             }
           },
           "default": {
-            "$ref": "#/responses/error"
+            "description": "cherry error",
+            "schema": {
+              "$ref": "#/definitions/importAllHandlerDefaultBody"
+            }
           }
         },
         "x-method-visibility": "public"
@@ -160,7 +194,10 @@
             }
           },
           "default": {
-            "$ref": "#/responses/error"
+            "description": "cherry error",
+            "schema": {
+              "$ref": "#/definitions/importAllHandlerDefaultBody"
+            }
           }
         },
         "x-method-visibility": "public"
@@ -179,7 +216,10 @@
             }
           },
           "default": {
-            "$ref": "#/responses/error"
+            "description": "cherry error",
+            "schema": {
+              "$ref": "#/definitions/importAllHandlerDefaultBody"
+            }
           }
         },
         "x-method-visibility": "public"
@@ -200,7 +240,10 @@
             }
           },
           "default": {
-            "$ref": "#/responses/error"
+            "description": "cherry error",
+            "schema": {
+              "$ref": "#/definitions/importAllHandlerDefaultBody"
+            }
           }
         },
         "x-method-visibility": "public"
@@ -219,7 +262,10 @@
             }
           },
           "default": {
-            "$ref": "#/responses/error"
+            "description": "cherry error",
+            "schema": {
+              "$ref": "#/definitions/importAllHandlerDefaultBody"
+            }
           }
         },
         "x-method-visibility": "public"
@@ -240,7 +286,10 @@
             }
           },
           "default": {
-            "$ref": "#/responses/error"
+            "description": "cherry error",
+            "schema": {
+              "$ref": "#/definitions/importAllHandlerDefaultBody"
+            }
           }
         },
         "x-method-visibility": "public"
@@ -259,7 +308,10 @@
             }
           },
           "default": {
-            "$ref": "#/responses/error"
+            "description": "cherry error",
+            "schema": {
+              "$ref": "#/definitions/importAllHandlerDefaultBody"
+            }
           }
         },
         "x-method-visibility": "public"
@@ -280,7 +332,10 @@
             }
           },
           "default": {
-            "$ref": "#/responses/error"
+            "description": "cherry error",
+            "schema": {
+              "$ref": "#/definitions/importAllHandlerDefaultBody"
+            }
           }
         },
         "x-method-visibility": "public"
@@ -299,7 +354,10 @@
             }
           },
           "default": {
-            "$ref": "#/responses/error"
+            "description": "cherry error",
+            "schema": {
+              "$ref": "#/definitions/importAllHandlerDefaultBody"
+            }
           }
         },
         "x-method-visibility": "public"
@@ -320,7 +378,10 @@
             }
           },
           "default": {
-            "$ref": "#/responses/error"
+            "description": "cherry error",
+            "schema": {
+              "$ref": "#/definitions/importAllHandlerDefaultBody"
+            }
           }
         },
         "x-method-visibility": "public"
@@ -339,7 +400,10 @@
             }
           },
           "default": {
-            "$ref": "#/responses/error"
+            "description": "cherry error",
+            "schema": {
+              "$ref": "#/definitions/importAllHandlerDefaultBody"
+            }
           }
         },
         "x-method-visibility": "public"
@@ -1990,6 +2054,56 @@
         }
       },
       "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
+    },
+    "importAllHandlerDefaultBody": {
+      "description": "Err -- standard serializable API error\nMessage -- constant error message:\n+ \"invalid username\"\n+ \"quota exceeded\"\n+ \"validation error\"\n...etc...\nID -- unique error identification code\nDetails -- optional context error messages kinda\n+ \"field 'Replicas' must be non-zero value\"\n+ \"not enough tights to feed gopher\"\n+ \"resource 'God' does't exist\"\nFields -- optional set of key-value pairs",
+      "type": "object",
+      "properties": {
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Details"
+        },
+        "fields": {
+          "description": "Fields -- represents additional key-value fields of error",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-package": "github.com/containerum/cherry"
+        },
+        "id": {
+          "description": "ErrID -- represents unique error ID",
+          "type": "object",
+          "properties": {
+            "kind": {
+              "description": "ErrKind -- represents kind of error",
+              "type": "integer",
+              "format": "uint64",
+              "x-go-package": "github.com/containerum/cherry"
+            },
+            "sid": {
+              "description": "ErrSID -- represents service ID of error",
+              "type": "string",
+              "x-go-package": "github.com/containerum/cherry"
+            }
+          },
+          "x-go-package": "github.com/containerum/cherry"
+        },
+        "message": {
+          "type": "string",
+          "x-go-name": "Message"
+        },
+        "status_http": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "StatusHTTP"
+        }
+      },
+      "x-go-gen-location": "operations",
+      "x-go-package": "github.com/containerum/cherry"
     }
   },
   "parameters": {
@@ -2020,22 +2134,13 @@
       "name": "Upgrade",
       "in": "header",
       "required": true
-    },
-    "UserIDHeader": {
-      "$ref": "vendor/github.com/containerum/utils/httputil/swagger.json#/parameters/UserIDHeader"
-    },
-    "UserNamespaceHeader": {
-      "$ref": "vendor/github.com/containerum/utils/httputil/swagger.json#/parameters/UserNamespacesHeader"
-    },
-    "UserRoleHeader": {
-      "$ref": "vendor/github.com/containerum/utils/httputil/swagger.json#/parameters/UserRoleHeader"
     }
   },
   "responses": {
     "error": {
       "description": "cherry error",
       "schema": {
-        "$ref": "vendor/github.com/containerum/cherry/swagger.json#/definitions/Err"
+        "$ref": "#/definitions/importAllHandlerDefaultBody"
       }
     }
   }
