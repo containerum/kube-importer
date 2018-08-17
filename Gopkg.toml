@@ -23,11 +23,7 @@ required = ["github.com/containerum/kube-client"]
 
 [[constraint]]
   name = "github.com/json-iterator/go"
-  version = "1.0.5"
-
-[[constraint]]
-  branch = "master"
-  name = "github.com/google/uuid"
+  version = "1.1.5"
 
 [[constraint]]
   name = "github.com/sirupsen/logrus"
@@ -52,7 +48,3 @@ required = ["github.com/containerum/kube-client"]
 [[constraint]]
   name = "github.com/containerum/kube-client"
   version = "^0.23.26"
-
-[[constraint]]
-  name = "github.com/golang/protobuf"
-  version = "^1.1.0"

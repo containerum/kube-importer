@@ -16,7 +16,6 @@ import (
 
 	"github.com/containerum/kube-importer/pkg/clients"
 	"github.com/containerum/kube-importer/pkg/kierrors"
-	headers "github.com/containerum/utils/httputil"
 	"github.com/gin-gonic/contrib/ginrus"
 	"github.com/gin-gonic/gin"
 )
@@ -34,8 +33,6 @@ func initMiddlewares(e gin.IRouter, kube *kubernetes.Kube, res *clients.Resource
 	if enableCORS {
 		cfg := cors.DefaultConfig()
 		cfg.AllowAllOrigins = true
-		cfg.AddAllowMethods(http.MethodDelete)
-		cfg.AddAllowHeaders(headers.UserRoleXHeader, headers.UserIDXHeader, headers.UserNamespacesXHeader)
 		e.Use(cors.New(cfg))
 		e.Use(middleware.RegisterKubeClient(kube))
 		e.Use(middleware.RegisterResourceClient(res))

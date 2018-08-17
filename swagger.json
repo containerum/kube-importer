@@ -1709,6 +1709,14 @@
       },
       "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
     },
+    "StorageList": {
+      "description": "StorageList -- model for storage names list",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "x-go-package": "github.com/containerum/kube-importer/vendor/git.containerum.net/ch/kube-api/pkg/model"
+    },
     "UpdateImage": {
       "description": "UpdateImage -- model for update container image request",
       "type": "object",
