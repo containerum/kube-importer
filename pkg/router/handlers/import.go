@@ -190,7 +190,7 @@ func ImportVolumesListHandler(ctx *gin.Context) {
 }
 
 // swagger:operation POST /all Import ImportAllHandler
-// Import volumes.
+// Import all resources.
 //
 // ---
 // x-method-visibility: public
@@ -270,6 +270,21 @@ func ImportAllHandler(ctx *gin.Context) {
 
 var upgrader = websocket.Upgrader{}
 
+// swagger:operation GET /all/ws Import ImportAllWS
+// Import all resources with websockets responce.
+//
+// ---
+// x-method-visibility: public
+// parameters:
+//  - $ref: '#/parameters/UpgradeHeader'
+//  - $ref: '#/parameters/ConnectionHeader'
+//  - $ref: '#/parameters/SecWebSocketKeyHeader'
+//  - $ref: '#/parameters/SecWebsocketVersionHeader'
+// responses:
+//  '101':
+//    description: import response
+//  default:
+//    $ref: '#/responses/error'
 func ImportAllWSHandler(ctx *gin.Context) {
 	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
 	perm := ctx.MustGet(m.PermClient).(clients.Permissions)
