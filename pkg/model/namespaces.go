@@ -1,9 +1,10 @@
 package model
 
 import (
+	"time"
+
 	kube_types "github.com/containerum/kube-client/pkg/model"
 	api_core "k8s.io/api/core/v1"
-	"time"
 )
 
 const defaultNSCPU = 100
@@ -11,7 +12,6 @@ const defaultNSRAM = 100
 
 func AddNamespacesWithoutRQ(nsList *kube_types.NamespacesList, allns interface{}) *kube_types.NamespacesList {
 	objects := allns.(*api_core.NamespaceList)
-
 	for _, ns := range objects.Items {
 		exists := false
 		for _, oldns := range nsList.Namespaces {
