@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net/url"
 
+	"time"
+
 	"git.containerum.net/ch/kube-api/pkg/model"
 	"git.containerum.net/ch/resource-service/pkg/util/coblog"
 	"github.com/containerum/cherry"
@@ -40,6 +42,7 @@ func NewResourceHTTP(u *url.URL) Resource {
 		SetLogger(log.WriterLevel(logrus.DebugLevel)).
 		SetDebug(true).
 		SetError(cherry.Err{}).
+		SetTimeout(10*time.Second).
 		SetHeader("Content-Type", "application/json").
 		SetHeader("Accept", "application/json").
 		SetHeader("X-User-Role", "admin").

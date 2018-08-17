@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net/url"
 
+	"time"
+
 	"git.containerum.net/ch/resource-service/pkg/util/coblog"
 	"github.com/containerum/cherry"
 	"github.com/containerum/cherry/adaptors/cherrylog"
@@ -33,6 +35,7 @@ func NewPermissionsHTTP(u *url.URL) Permissions {
 		SetLogger(log.WriterLevel(logrus.DebugLevel)).
 		SetDebug(true).
 		SetError(cherry.Err{}).
+		SetTimeout(10*time.Second).
 		SetHeader("Content-Type", "application/json").
 		SetHeader("Accept", "application/json").
 		SetHeader("X-User-Role", "admin").
