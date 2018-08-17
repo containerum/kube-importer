@@ -72,4 +72,5 @@ func initRoutes(e gin.IRouter) {
 	e.POST("/volumes", h.ImportVolumesListHandler)
 
 	e.POST("/all", h.ImportAllHandler)
+	e.GET("/all/ws", h.ImportAllWSHandler)
 }

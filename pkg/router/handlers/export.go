@@ -29,7 +29,7 @@ func ExportNamespacesListHandler(ctx *gin.Context) {
 	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
 	ret, err := exportNamespaces(kube)
 	if err != nil {
-		gonic.Gonic(kierrors.ErrUnableGetResourcesList(), ctx)
+		gonic.Gonic(kierrors.ErrUnableExportResources(), ctx)
 		return
 	}
 	ctx.JSON(http.StatusOK, ret)
@@ -51,7 +51,7 @@ func ExportDeploymentsListHandler(ctx *gin.Context) {
 	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
 	ret, err := exportDeployments(kube)
 	if err != nil {
-		gonic.Gonic(kierrors.ErrUnableGetResourcesList(), ctx)
+		gonic.Gonic(kierrors.ErrUnableExportResources(), ctx)
 		return
 	}
 	ctx.JSON(http.StatusOK, ret)
@@ -73,7 +73,7 @@ func ExportServicesListHandler(ctx *gin.Context) {
 	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
 	ret, err := exportServices(kube)
 	if err != nil {
-		gonic.Gonic(kierrors.ErrUnableGetResourcesList(), ctx)
+		gonic.Gonic(kierrors.ErrUnableExportResources(), ctx)
 		return
 	}
 	ctx.JSON(http.StatusOK, ret)
@@ -95,7 +95,7 @@ func ExportIngressesListHandler(ctx *gin.Context) {
 	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
 	ret, err := exportIngresses(kube)
 	if err != nil {
-		gonic.Gonic(kierrors.ErrUnableGetResourcesList(), ctx)
+		gonic.Gonic(kierrors.ErrUnableExportResources(), ctx)
 		return
 	}
 	ctx.JSON(http.StatusOK, ret)
@@ -117,7 +117,7 @@ func ExportConfigMapsListHandler(ctx *gin.Context) {
 	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
 	ret, err := exportConfigMaps(kube)
 	if err != nil {
-		gonic.Gonic(kierrors.ErrUnableGetResourcesList(), ctx)
+		gonic.Gonic(kierrors.ErrUnableExportResources(), ctx)
 		return
 	}
 	ctx.JSON(http.StatusOK, ret)
@@ -139,7 +139,7 @@ func ExportStoragesListHandler(ctx *gin.Context) {
 	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
 	ret, err := exportStorages(kube)
 	if err != nil {
-		gonic.Gonic(kierrors.ErrUnableGetResourcesList(), ctx)
+		gonic.Gonic(kierrors.ErrUnableExportResources(), ctx)
 		return
 	}
 	ctx.JSON(http.StatusOK, ret)
@@ -161,7 +161,7 @@ func ExportVolumesListHandler(ctx *gin.Context) {
 	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
 	ret, err := exportVolumes(kube)
 	if err != nil {
-		gonic.Gonic(kierrors.ErrUnableGetResourcesList(), ctx)
+		gonic.Gonic(kierrors.ErrUnableExportResources(), ctx)
 		return
 	}
 	ctx.JSON(http.StatusOK, ret)
@@ -194,12 +194,12 @@ func exportNamespaces(kube *kubernetes.Kube) (filteredNsList kubtypes.Namespaces
 }
 
 func exportDeployments(kube *kubernetes.Kube) (filteredDeplList kubtypes.DeploymentsList, err error) {
-	quotas, err := kube.GetDeploymentList("", "")
+	deployments, err := kube.GetDeploymentList("", "")
 	if err != nil {
 		return
 	}
 
-	ret, err := model.ParseKubeDeploymentList(quotas, false)
+	ret, err := model.ParseKubeDeploymentList(deployments, false)
 	if err != nil {
 		return
 	}
@@ -251,17 +251,18 @@ func exportIngresses(kube *kubernetes.Kube) (filteredIngrList kubtypes.Ingresses
 }
 
 func exportConfigMaps(kube *kubernetes.Kube) (filteredCMList kubtypes.ConfigMapsList, err error) {
-	quotas, err := kube.GetConfigMapList("")
+	cms, err := kube.GetConfigMapList("")
 	if err != nil {
 		return
 	}
 
-	ret, err := model.ParseKubeConfigMapList(quotas, false)
+	ret, err := model.ParseKubeConfigMapList(cms, false)
 	if err != nil {
 		return
 	}
 
 	for _, cm := range ret.ConfigMaps {
+		cm.Data = nil
 		if !m.IsExcluded(cm.Namespace) {
 			filteredCMList.ConfigMaps = append(filteredCMList.ConfigMaps, cm)
 		}
@@ -270,12 +271,12 @@ func exportConfigMaps(kube *kubernetes.Kube) (filteredCMList kubtypes.ConfigMaps
 }
 
 func exportStorages(kube *kubernetes.Kube) (storagesList model.StorageList, err error) {
-	storageList, err := kube.GetStorageClassesList()
+	storages, err := kube.GetStorageClassesList()
 	if err != nil {
 		return
 	}
 
-	ret, err := model.ParseStoragesList(storageList)
+	ret, err := model.ParseStoragesList(storages)
 	if err != nil {
 		return
 	}
