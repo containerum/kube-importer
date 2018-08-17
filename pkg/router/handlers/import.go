@@ -268,15 +268,13 @@ func ImportAllHandler(ctx *gin.Context) {
 	ctx.JSON(http.StatusAccepted, ret)
 }
 
-var upgrader = websocket.Upgrader{} // use default options
-
 func ImportAllWSHandler(ctx *gin.Context) {
 	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
 	perm := ctx.MustGet(m.PermClient).(clients.Permissions)
 	res := ctx.MustGet(m.ResClient).(clients.Resource)
 	vol := ctx.MustGet(m.VolClient).(clients.Volumes)
 
-	c, err := upgrader.Upgrade(ctx.Writer, ctx.Request, nil)
+	c, err := websocket.Upgrader{}.Upgrade(ctx.Writer, ctx.Request, nil)
 	if err != nil {
 		logrus.Errorln("upgrade error:", err)
 		return
