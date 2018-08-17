@@ -270,9 +270,6 @@ func ImportAllHandler(ctx *gin.Context) {
 
 var upgrader = websocket.Upgrader{} // use default options
 
-type WSError struct {
-}
-
 func ImportAllWSHandler(ctx *gin.Context) {
 	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
 	perm := ctx.MustGet(m.PermClient).(clients.Permissions)
