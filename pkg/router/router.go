@@ -34,11 +34,11 @@ func initMiddlewares(e gin.IRouter, kube *kubernetes.Kube, res *clients.Resource
 		cfg := cors.DefaultConfig()
 		cfg.AllowAllOrigins = true
 		e.Use(cors.New(cfg))
-		e.Use(middleware.RegisterKubeClient(kube))
-		e.Use(middleware.RegisterResourceClient(res))
-		e.Use(middleware.RegisterPermissionsClient(perm))
-		e.Use(middleware.RegisterVolumesClient(vol))
 	}
+	e.Use(middleware.RegisterKubeClient(kube))
+	e.Use(middleware.RegisterResourceClient(res))
+	e.Use(middleware.RegisterPermissionsClient(perm))
+	e.Use(middleware.RegisterVolumesClient(vol))
 	e.Group("/static").
 		StaticFS("/", static.HTTP)
 	/* System */
