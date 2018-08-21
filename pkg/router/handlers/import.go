@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"context"
 	"net/http"
 
 	"git.containerum.net/ch/kube-api/pkg/kubernetes"
@@ -380,7 +381,7 @@ func ImportAllWSHandler(ctx *gin.Context) {
 	<-done
 }
 
-func importNamespacesList(ctx *gin.Context, kube *kubernetes.Kube, perm clients.Permissions) (*kubtypes.ImportResponse, error) {
+func importNamespacesList(ctx context.Context, kube *kubernetes.Kube, perm clients.Permissions) (*kubtypes.ImportResponse, error) {
 	ret, err := exportNamespaces(kube)
 	if err != nil {
 		return nil, err
@@ -388,7 +389,7 @@ func importNamespacesList(ctx *gin.Context, kube *kubernetes.Kube, perm clients.
 	return perm.ImportNamespaces(ctx, ret)
 }
 
-func importDeploymentsList(ctx *gin.Context, kube *kubernetes.Kube, res clients.Resource) (*kubtypes.ImportResponse, error) {
+func importDeploymentsList(ctx context.Context, kube *kubernetes.Kube, res clients.Resource) (*kubtypes.ImportResponse, error) {
 	ret, err := exportDeployments(kube)
 	if err != nil {
 		return nil, err
@@ -396,7 +397,7 @@ func importDeploymentsList(ctx *gin.Context, kube *kubernetes.Kube, res clients.
 	return res.ImportDeployments(ctx, ret)
 }
 
-func importServicesList(ctx *gin.Context, kube *kubernetes.Kube, res clients.Resource) (*kubtypes.ImportResponse, error) {
+func importServicesList(ctx context.Context, kube *kubernetes.Kube, res clients.Resource) (*kubtypes.ImportResponse, error) {
 	ret, err := exportServices(kube)
 	if err != nil {
 		return nil, err
@@ -404,7 +405,7 @@ func importServicesList(ctx *gin.Context, kube *kubernetes.Kube, res clients.Res
 	return res.ImportServices(ctx, ret)
 }
 
-func importIngressesList(ctx *gin.Context, kube *kubernetes.Kube, res clients.Resource) (*kubtypes.ImportResponse, error) {
+func importIngressesList(ctx context.Context, kube *kubernetes.Kube, res clients.Resource) (*kubtypes.ImportResponse, error) {
 	ret, err := exportIngresses(kube)
 	if err != nil {
 		return nil, err
@@ -412,7 +413,7 @@ func importIngressesList(ctx *gin.Context, kube *kubernetes.Kube, res clients.Re
 	return res.ImportIngresses(ctx, ret)
 }
 
-func importConfigMapsList(ctx *gin.Context, kube *kubernetes.Kube, res clients.Resource) (*kubtypes.ImportResponse, error) {
+func importConfigMapsList(ctx context.Context, kube *kubernetes.Kube, res clients.Resource) (*kubtypes.ImportResponse, error) {
 	ret, err := exportConfigMaps(kube)
 	if err != nil {
 		return nil, err
@@ -420,7 +421,7 @@ func importConfigMapsList(ctx *gin.Context, kube *kubernetes.Kube, res clients.R
 	return res.ImportConfigMaps(ctx, ret)
 }
 
-func importStoragesList(ctx *gin.Context, kube *kubernetes.Kube, vol clients.Volumes) (*kubtypes.ImportResponse, error) {
+func importStoragesList(ctx context.Context, kube *kubernetes.Kube, vol clients.Volumes) (*kubtypes.ImportResponse, error) {
 	ret, err := exportStorages(kube)
 	if err != nil {
 		return nil, err
@@ -428,7 +429,7 @@ func importStoragesList(ctx *gin.Context, kube *kubernetes.Kube, vol clients.Vol
 	return vol.ImportStorages(ctx, ret)
 }
 
-func importVolumesList(ctx *gin.Context, kube *kubernetes.Kube, vol clients.Volumes) (*kubtypes.ImportResponse, error) {
+func importVolumesList(ctx context.Context, kube *kubernetes.Kube, vol clients.Volumes) (*kubtypes.ImportResponse, error) {
 	ret, err := exportVolumes(kube)
 	if err != nil {
 		return nil, err
