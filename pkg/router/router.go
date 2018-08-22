@@ -16,6 +16,7 @@ import (
 
 	"github.com/containerum/kube-importer/pkg/clients"
 	"github.com/containerum/kube-importer/pkg/kierrors"
+	"github.com/containerum/utils/httputil"
 	"github.com/gin-gonic/contrib/ginrus"
 	"github.com/gin-gonic/gin"
 )
@@ -47,6 +48,8 @@ func initMiddlewares(e gin.IRouter, kube *kubernetes.Kube, res *clients.Resource
 }
 
 func initRoutes(e gin.IRouter) {
+	e.Use(httputil.RequireAdminRole(kierrors.ErrAdminRequired))
+
 	e.GET("/namespaces", h.ExportNamespacesListHandler)
 	e.POST("/namespaces", h.ImportNamespacesListHandler)
 

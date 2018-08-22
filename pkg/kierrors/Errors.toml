@@ -23,3 +23,9 @@ SID = "Kube-Importer"
     StatusHTTP = 500
     Message = "Internal error"
     Kind = 3
+
+[[error]]
+    Name = "ErrAdminRequired"
+    StatusHTTP = 403
+    Message = "Admin access required"
+    Kind = 4

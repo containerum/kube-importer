@@ -42,9 +42,9 @@ required = ["github.com/containerum/kube-client"]
   version = "1.2.0"
 
 [[constraint]]
-  name = "github.com/containerum/utils"
-  version = "1.0.0"
-
-[[constraint]]
   name = "github.com/containerum/kube-client"
   version = "^0.23.26"
+
+[[constraint]]
+  name = "github.com/containerum/utils"
+  version = "1.0.7"
