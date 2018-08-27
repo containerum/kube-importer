@@ -15,7 +15,7 @@ var version string
 
 func main() {
 	app := cli.NewApp()
-	app.Name = "ch-kube-importer utility"
+	app.Name = "kube-importer"
 	app.Version = version
 	app.Usage = "Kube importer utility"
 	app.Flags = flags
