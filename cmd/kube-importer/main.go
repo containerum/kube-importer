@@ -11,9 +11,12 @@ import (
 //go:generate swagger flatten ../../swagger.json -o ../../swagger.json
 //go:generate swagger validate ../../swagger.json
 
+var version string
+
 func main() {
 	app := cli.NewApp()
 	app.Name = "ch-kube-importer utility"
+	app.Version = version
 	app.Usage = "Kube importer utility"
 	app.Flags = flags
 
