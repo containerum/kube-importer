@@ -15,5 +15,12 @@ rbac:
   serviceAccountName: null
 
 env:
-  CH_KUBE_IMPORTER_DEBUG: "true"
-  CH_KUBE_IMPORTER_TEXTLOG: "true"
+  global:
+    CH_KUBE_IMPORTER_DEBUG: "true"
+    CH_KUBE_IMPORTER_TEXTLOG: "true"
+    CH_KUBE_IMPORTER_CORS: "false"
+    CH_KUBE_IMPORTER_EXCLUDED_NS: "default,kube-system"
+  local:
+    CH_KUBE_IMPORTER_RESOURCE_URL: "http://resource:1213"
+    CH_KUBE_IMPORTER_PERMISSIONS_URL: "http://permissions:4242"
+    CH_KUBE_IMPORTER_VOLUMES_URL: "http://volume:4343"
