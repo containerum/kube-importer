@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"git.containerum.net/ch/kube-api/pkg/kubernetes"
+	"github.com/containerum/kube-client/pkg/model"
 	"github.com/containerum/kube-importer/pkg/router"
 	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
@@ -36,7 +37,13 @@ func initServer(c *cli.Context) error {
 	vol, err := setupVolumes(c)
 	exitOnErr(err)
 
-	app := router.CreateRouter(&kube, res, perm, vol, c.StringSlice("exclude_ns"), c.Bool("cors"))
+	status := model.ServiceStatus{
+		Name:     c.App.Name,
+		Version:  c.App.Version,
+		StatusOK: true,
+	}
+
+	app := router.CreateRouter(&kube, res, perm, vol, c.StringSlice("exclude_ns"), &status, c.Bool("cors"))
 
 	srv := &http.Server{
 		Addr:    ":" + c.String("port"),

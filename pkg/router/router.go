@@ -14,6 +14,7 @@ import (
 
 	"time"
 
+	"github.com/containerum/kube-client/pkg/model"
 	"github.com/containerum/kube-importer/pkg/clients"
 	"github.com/containerum/kube-importer/pkg/kierrors"
 	"github.com/containerum/utils/httputil"
@@ -21,8 +22,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func CreateRouter(kube *kubernetes.Kube, res *clients.Resource, perm *clients.Permissions, vol *clients.Volumes, excluded []string, enableCORS bool) http.Handler {
+func CreateRouter(kube *kubernetes.Kube, res *clients.Resource, perm *clients.Permissions, vol *clients.Volumes, excluded []string, status *model.ServiceStatus, enableCORS bool) http.Handler {
 	e := gin.New()
+	e.GET("/status", httputil.ServiceStatus(status))
 	initMiddlewares(e, kube, res, perm, vol, excluded, enableCORS)
 	initRoutes(e)
 	return e
@@ -48,29 +50,28 @@ func initMiddlewares(e gin.IRouter, kube *kubernetes.Kube, res *clients.Resource
 }
 
 func initRoutes(e gin.IRouter) {
-	e.Use(httputil.RequireAdminRole(kierrors.ErrAdminRequired))
+	group := e.Group("/", httputil.RequireAdminRole(kierrors.ErrAdminRequired))
+	group.GET("/namespaces", h.ExportNamespacesListHandler)
+	group.POST("/namespaces", h.ImportNamespacesListHandler)
 
-	e.GET("/namespaces", h.ExportNamespacesListHandler)
-	e.POST("/namespaces", h.ImportNamespacesListHandler)
+	group.GET("/deployments", h.ExportDeploymentsListHandler)
+	group.POST("/deployments", h.ImportDeploymentsListHandler)
 
-	e.GET("/deployments", h.ExportDeploymentsListHandler)
-	e.POST("/deployments", h.ImportDeploymentsListHandler)
+	group.GET("/services", h.ExportServicesListHandler)
+	group.POST("/services", h.ImportServicesListHandler)
 
-	e.GET("/services", h.ExportServicesListHandler)
-	e.POST("/services", h.ImportServicesListHandler)
+	group.GET("/configmaps", h.ExportConfigMapsListHandler)
+	group.POST("/configmaps", h.ImportConfigMapsListHandler)
 
-	e.GET("/configmaps", h.ExportConfigMapsListHandler)
-	e.POST("/configmaps", h.ImportConfigMapsListHandler)
+	group.GET("/ingresses", h.ExportIngressesListHandler)
+	group.POST("/ingresses", h.ImportIngressesListHandler)
 
-	e.GET("/ingresses", h.ExportIngressesListHandler)
-	e.POST("/ingresses", h.ImportIngressesListHandler)
+	group.GET("/storages", h.ExportStoragesListHandler)
+	group.POST("/storages", h.ImportStoragesListHandler)
 
-	e.GET("/storages", h.ExportStoragesListHandler)
-	e.POST("/storages", h.ImportStoragesListHandler)
+	group.GET("/volumes", h.ExportVolumesListHandler)
+	group.POST("/volumes", h.ImportVolumesListHandler)
 
-	e.GET("/volumes", h.ExportVolumesListHandler)
-	e.POST("/volumes", h.ImportVolumesListHandler)
-
-	e.POST("/all", h.ImportAllHandler)
-	e.GET("/all/ws", h.ImportAllWSHandler)
+	group.POST("/all", h.ImportAllHandler)
+	group.GET("/all/ws", h.ImportAllWSHandler)
 }
