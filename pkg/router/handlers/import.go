@@ -269,7 +269,11 @@ func ImportAllHandler(ctx *gin.Context) {
 	ctx.JSON(http.StatusAccepted, ret)
 }
 
-var upgrader = websocket.Upgrader{}
+var upgrader = websocket.Upgrader{
+	CheckOrigin: func(r *http.Request) bool {
+		return true
+	},
+}
 
 // swagger:operation GET /all/ws Import ImportAllWS
 // Import all resources with websockets response.
