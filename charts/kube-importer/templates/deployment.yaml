@@ -29,7 +29,7 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-            {{- range $key, $val := .Values.env }}
+            {{- range $key, $val := .Values.env.global }}
             - name: {{ $key  }}
               value: {{ $val | quote }}
             {{- end }}
@@ -57,6 +57,7 @@ spec:
             - name: CH_KUBE_IMPORTER_VOLUMES_URL
               value: "{{ .Release.Name }}-volume:4343"
             {{- end }}
+
       {{- with .Values.image.secret }}
       imagePullSecrets:
       - name: {{ . }}
