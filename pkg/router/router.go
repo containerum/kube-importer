@@ -53,6 +53,7 @@ func initRoutes(e gin.IRouter) {
 	group := e.Group("/", httputil.RequireAdminRole(kierrors.ErrAdminRequired))
 	group.GET("/namespaces", h.ExportNamespacesListHandler)
 	group.POST("/namespaces", h.ImportNamespacesListHandler)
+	group.POST("/limits", h.CreateMissingLimitsHandler)
 
 	group.GET("/deployments", h.ExportDeploymentsListHandler)
 	group.POST("/deployments", h.ImportDeploymentsListHandler)

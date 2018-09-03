@@ -183,7 +183,33 @@ func exportNamespaces(kube *kubernetes.Kube) (filteredNsList kubtypes.Namespaces
 		return
 	}
 
-	nsList = importerModel.AddNamespacesWithoutRQ(nsList, nss)
+	nsList = importerModel.AddNamespacesWithoutRQ(kube, nsList, nss)
+
+	for _, ns := range nsList.Namespaces {
+		if !m.IsExcluded(ns.ID) {
+			filteredNsList.Namespaces = append(filteredNsList.Namespaces, ns)
+		}
+	}
+	return
+}
+
+func getNamespacesWithoutQuota(kube *kubernetes.Kube) (filteredNsList kubtypes.NamespacesList, err error) {
+	quotas, err := kube.GetNamespaceQuotaList("")
+	if err != nil {
+		return
+	}
+
+	nsList, err := model.ParseKubeResourceQuotaList(quotas)
+	if err != nil {
+		return
+	}
+
+	nss, err := kube.GetNamespaceList("")
+	if err != nil {
+		return
+	}
+
+	nsList = importerModel.GetNamespacesWithoutQuota(kube, nsList, nss)
 
 	for _, ns := range nsList.Namespaces {
 		if !m.IsExcluded(ns.ID) {
