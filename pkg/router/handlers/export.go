@@ -177,6 +177,11 @@ func exportNamespaces(kube *kubernetes.Kube) (filteredNsList kubtypes.Namespaces
 	if err != nil {
 		return
 	}
+	for i := range nsList.Namespaces {
+		if nsList.Namespaces[i].Owner == "" {
+			nsList.Namespaces[i].Owner = "00000000-0000-0000-0000-000000000000"
+		}
+	}
 
 	nss, err := kube.GetNamespaceList("")
 	if err != nil {
