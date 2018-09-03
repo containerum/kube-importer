@@ -20,10 +20,13 @@ spec:
         release: {{ .Release.Name }}
     spec:
       {{ if .Values.rbac.serviceAccountName }}
+        {{- if ne .Values.rbac.serviceAccountName "release-name" }}
       serviceAccountName: {{ .Values.rbac.serviceAccountName }}
+        {{ end }}
       {{ else }}
       serviceAccountName: {{ .Release.Name }}
       {{ end }}
+
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
