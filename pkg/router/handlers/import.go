@@ -406,7 +406,7 @@ func ImportAllWSHandler(ctx *gin.Context) {
 	}()
 
 	go func() {
-		for i := 0; i < 7; i++ {
+		for i := 0; i < 8; i++ {
 			select {
 			case resp := <-messages:
 				if err := c.WriteJSON(resp); err != nil {
