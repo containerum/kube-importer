@@ -2,9 +2,11 @@ package handlers
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	"git.containerum.net/ch/kube-api/pkg/kubernetes"
+	"git.containerum.net/ch/kube-api/pkg/model"
 	"github.com/containerum/cherry/adaptors/gonic"
 	kubtypes "github.com/containerum/kube-client/pkg/model"
 	"github.com/gin-gonic/gin"
@@ -33,6 +35,30 @@ func ImportNamespacesListHandler(ctx *gin.Context) {
 	perm := ctx.MustGet(m.PermClient).(clients.Permissions)
 
 	resp, err := importNamespacesList(ctx, kube, perm)
+	if err != nil {
+		ctx.Error(err)
+		gonic.Gonic(kierrors.ErrUnableImportResources().AddDetails("namespaces"), ctx)
+	} else {
+		ctx.JSON(http.StatusAccepted, resp)
+	}
+}
+
+// swagger:operation POST /limits Import CreateMissingLimits
+// Create missing LimitRange and ResourceQuota in Kubernetes namespaces.
+//
+// ---
+// x-method-visibility: public
+// responses:
+//  '202':
+//    description: creation result
+//    schema:
+//      $ref: '#/definitions/ImportResponse'
+//  default:
+//    $ref: '#/responses/error'
+func CreateMissingLimitsHandler(ctx *gin.Context) {
+	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
+
+	resp, err := createMissingLimits(kube)
 	if err != nil {
 		ctx.Error(err)
 		gonic.Gonic(kierrors.ErrUnableImportResources().AddDetails("namespaces"), ctx)
@@ -210,6 +236,14 @@ func ImportAllHandler(ctx *gin.Context) {
 
 	ret := make(kubtypes.ImportResponseTotal)
 
+	respLimits, err := createMissingLimits(kube)
+	if err != nil {
+		ctx.Error(err)
+		gonic.Gonic(kierrors.ErrUnableCreateLimits().AddDetails("kubernetes-limits"), ctx)
+		return
+	}
+	ret["kubernetes-limits"] = *respLimits
+
 	respNs, err := importNamespacesList(ctx, kube, perm)
 	if err != nil {
 		ctx.Error(err)
@@ -308,6 +342,13 @@ func ImportAllWSHandler(ctx *gin.Context) {
 	errorch := make(chan error)
 
 	go func() {
+		respLimits, err := createMissingLimits(kube)
+		if err != nil {
+			errorch <- err
+			return
+		}
+		messages <- kubtypes.ImportResponseTotal{"kubernetes-limits": *respLimits}
+
 		respNs, err := importNamespacesList(ctx, kube, perm)
 		if err != nil {
 			errorch <- err
@@ -391,6 +432,34 @@ func importNamespacesList(ctx context.Context, kube *kubernetes.Kube, perm clien
 		return nil, err
 	}
 	return perm.ImportNamespaces(ctx, ret)
+}
+
+func createMissingLimits(kube *kubernetes.Kube) (*kubtypes.ImportResponse, error) {
+	nswq, err := getNamespacesWithoutQuota(kube)
+	if err != nil {
+		return nil, err
+	}
+	resp := kubtypes.ImportResponse{
+		Imported: []kubtypes.ImportResult{},
+		Failed:   []kubtypes.ImportResult{},
+	}
+	for _, v := range nswq.Namespaces {
+		newQuota, errs := model.MakeResourceQuota(v.ID, nil, v.Resources.Hard)
+		if errs != nil {
+			resp.ImportFailed("quota", v.ID, fmt.Sprintf("%v", errs))
+			continue
+		}
+		if _, err := kube.CreateNamespaceQuota(v.ID, newQuota); err != nil {
+			resp.ImportFailed("quota", v.ID, err.Error())
+			continue
+		}
+		if err := kube.CreateLimitRange(v.ID); err != nil {
+			resp.ImportFailed("quota", v.ID, err.Error())
+			continue
+		}
+		resp.ImportSuccessful("quota", v.ID)
+	}
+	return &resp, nil
 }
 
 func importDeploymentsList(ctx context.Context, kube *kubernetes.Kube, res clients.Resource) (*kubtypes.ImportResponse, error) {

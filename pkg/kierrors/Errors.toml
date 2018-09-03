@@ -29,3 +29,9 @@ SID = "Kube-Importer"
     StatusHTTP = 403
     Message = "Admin access required"
     Kind = 4
+
+[[error]]
+    Name = "ErrUnableCreateLimits"
+    StatusHTTP = 500
+    Message = "Unable to create resources limits and quotas"
+    Kind = 5

@@ -225,6 +225,30 @@
         "x-method-visibility": "public"
       }
     },
+    "/limits": {
+      "post": {
+        "tags": [
+          "Import"
+        ],
+        "summary": "Create missing LimitRange and ResourceQuota in Kubernetes namespaces.",
+        "operationId": "CreateMissingLimits",
+        "responses": {
+          "202": {
+            "description": "creation result",
+            "schema": {
+              "$ref": "#/definitions/ImportResponse"
+            }
+          },
+          "default": {
+            "description": "cherry error",
+            "schema": {
+              "$ref": "#/definitions/importAllHandlerDefaultBody"
+            }
+          }
+        },
+        "x-method-visibility": "public"
+      }
+    },
     "/namespaces": {
       "get": {
         "tags": [
@@ -1508,6 +1532,31 @@
           "type": "integer",
           "format": "int64",
           "x-go-name": "TargetPort"
+        }
+      },
+      "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
+    },
+    "ServiceStatus": {
+      "type": "object",
+      "properties": {
+        "details": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "Details"
+        },
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "ok": {
+          "type": "boolean",
+          "x-go-name": "StatusOK"
+        },
+        "version": {
+          "type": "string",
+          "x-go-name": "Version"
         }
       },
       "x-go-package": "github.com/containerum/kube-importer/vendor/github.com/containerum/kube-client/pkg/model"
