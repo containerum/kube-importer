@@ -42,7 +42,7 @@ spec:
               value: "{{ .Values.env.local.CH_KUBE_IMPORTER_RESOURCE_URL }}"
             {{- else }}
             - name: CH_KUBE_IMPORTER_RESOURCE_URL
-              value: "{{ .Release.Name }}-resource:1213"
+              value: "http://{{ .Release.Name }}-resource:1213"
             {{- end }}
 
             {{- if .Values.env.local.CH_KUBE_IMPORTER_PERMISSIONS_URL }}
@@ -50,7 +50,7 @@ spec:
               value: "{{ .Values.env.local.CH_KUBE_IMPORTER_PERMISSIONS_URL }}"
             {{- else }}
             - name: CH_KUBE_IMPORTER_PERMISSIONS_URL
-              value: "{{ .Release.Name }}-permissions:4242"
+              value: "http://{{ .Release.Name }}-permissions:4242"
             {{- end }}
 
             {{- if .Values.env.local.CH_KUBE_IMPORTER_VOLUMES_URL }}
@@ -58,7 +58,7 @@ spec:
               value: "{{ .Values.env.local.CH_KUBE_IMPORTER_VOLUMES_URL }}"
             {{- else }}
             - name: CH_KUBE_IMPORTER_VOLUMES_URL
-              value: "{{ .Release.Name }}-volume:4343"
+              value: "http://{{ .Release.Name }}-volume:4343"
             {{- end }}
 
       {{- with .Values.image.secret }}
