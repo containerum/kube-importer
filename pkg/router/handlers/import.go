@@ -43,6 +43,18 @@ func ImportNamespacesListHandler(ctx *gin.Context) {
 	}
 }
 
+// swagger:operation POST /limits Import CreateMissingLimits
+// Create missing LimitRange and ResourceQuota in Kubernetes namespaces.
+//
+// ---
+// x-method-visibility: public
+// responses:
+//  '202':
+//    description: creation result
+//    schema:
+//      $ref: '#/definitions/ImportResponse'
+//  default:
+//    $ref: '#/responses/error'
 func CreateMissingLimitsHandler(ctx *gin.Context) {
 	kube := ctx.MustGet(m.KubeClient).(*kubernetes.Kube)
 
