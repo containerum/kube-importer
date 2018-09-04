@@ -19,13 +19,15 @@ spec:
         app: {{ template "name" . }}
         release: {{ .Release.Name }}
     spec:
-      {{ if .Values.rbac.serviceAccountName }}
+      {{- if .Values.rbac.serviceAccountName }}
         {{- if ne .Values.rbac.serviceAccountName "release-name" }}
       serviceAccountName: {{ .Values.rbac.serviceAccountName }}
-        {{ end }}
-      {{ else }}
+        {{- else }}
       serviceAccountName: {{ .Release.Name }}
-      {{ end }}
+        {{- end }}
+      {{- else }}
+      serviceAccountName: {{ .Release.Name }}
+      {{- end }}
 
       containers:
         - name: {{ .Chart.Name }}
