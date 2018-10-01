@@ -4,17 +4,18 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"sync"
+	"time"
 
 	"git.containerum.net/ch/kube-api/pkg/kubernetes"
 	"git.containerum.net/ch/kube-api/pkg/model"
 	"github.com/containerum/cherry/adaptors/gonic"
 	kubtypes "github.com/containerum/kube-client/pkg/model"
-	"github.com/gin-gonic/gin"
-	"github.com/gorilla/websocket"
-
 	"github.com/containerum/kube-importer/pkg/clients"
 	"github.com/containerum/kube-importer/pkg/kierrors"
 	m "github.com/containerum/kube-importer/pkg/router/middleware"
+	"github.com/gin-gonic/gin"
+	"github.com/gorilla/websocket"
 	"github.com/sirupsen/logrus"
 )
 
@@ -303,7 +304,11 @@ func ImportAllHandler(ctx *gin.Context) {
 	ctx.JSON(http.StatusAccepted, ret)
 }
 
-var upgrader = websocket.Upgrader{}
+var upgrader = websocket.Upgrader{
+	CheckOrigin: func(r *http.Request) bool {
+		return true
+	},
+}
 
 // swagger:operation GET /all/ws Import ImportAllWS
 // Import all resources with websockets response.
@@ -332,12 +337,13 @@ func ImportAllWSHandler(ctx *gin.Context) {
 		return
 	}
 	defer c.Close()
-
-	messages := make(chan interface{})
-	done := make(chan bool)
+	messages := make(chan kubtypes.ImportResponseTotal)
 	errorch := make(chan error)
+	var wg sync.WaitGroup
 
+	wg.Add(1)
 	go func() {
+		defer wg.Done()
 		respLimits, err := createMissingLimits(kube)
 		if err != nil {
 			errorch <- err
@@ -353,7 +359,9 @@ func ImportAllWSHandler(ctx *gin.Context) {
 		messages <- kubtypes.ImportResponseTotal{"namespaces": *respNs}
 	}()
 
+	wg.Add(1)
 	go func() {
+		defer wg.Done()
 		respDepl, err := importDeploymentsList(ctx, kube, res)
 		if err != nil {
 			errorch <- err
@@ -376,7 +384,9 @@ func ImportAllWSHandler(ctx *gin.Context) {
 		messages <- kubtypes.ImportResponseTotal{"ingresses": *respIngr}
 	}()
 
+	wg.Add(1)
 	go func() {
+		defer wg.Done()
 		respCM, err := importConfigMapsList(ctx, kube, res)
 		if err != nil {
 			errorch <- err
@@ -385,7 +395,9 @@ func ImportAllWSHandler(ctx *gin.Context) {
 		messages <- kubtypes.ImportResponseTotal{"configmaps": *respCM}
 	}()
 
+	wg.Add(1)
 	go func() {
+		defer wg.Done()
 		respStorages, err := importStoragesList(ctx, kube, vol)
 		if err != nil {
 			errorch <- err
@@ -402,24 +414,35 @@ func ImportAllWSHandler(ctx *gin.Context) {
 	}()
 
 	go func() {
-		for i := 0; i < 8; i++ {
-			select {
-			case resp := <-messages:
-				if err := c.WriteJSON(resp); err != nil {
-					logrus.Error(err)
-					done <- true
-				}
-			case err := <-errorch:
-				logrus.Error(err)
-				if wrerr := c.WriteJSON(err); wrerr != nil {
-					logrus.Error(wrerr)
-				}
-				done <- true
-			}
-		}
-		done <- true
+		wg.Wait()
+		close(messages)
 	}()
-	<-done
+
+	timer := time.NewTimer(600 * time.Second)
+	defer timer.Stop()
+	for {
+		select {
+		case resp, ok := <-messages:
+			if !ok {
+				return
+			}
+			if err := c.WriteJSON(resp); err != nil {
+				ctx.Abort()
+				return
+			}
+		case err := <-errorch:
+			logrus.Error(err)
+			if err := c.WriteJSON(err); err != nil {
+				logrus.Error(err)
+				ctx.Abort()
+				return
+			}
+		case <-timer.C:
+			//Timeout
+			ctx.Abort()
+			return
+		}
+	}
 }
 
 func importNamespacesList(ctx context.Context, kube *kubernetes.Kube, perm clients.Permissions) (*kubtypes.ImportResponse, error) {
