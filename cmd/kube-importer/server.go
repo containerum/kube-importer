@@ -43,7 +43,7 @@ func initServer(c *cli.Context) error {
 		StatusOK: true,
 	}
 
-	app := router.CreateRouter(&kube, res, perm, vol, c.StringSlice("exclude_ns"), &status, c.Bool("cors"))
+	app := router.CreateRouter(&kube, res, perm, vol, c.StringSlice("excluded_ns"), &status, c.Bool("cors"))
 
 	srv := &http.Server{
 		Addr:    ":" + c.String("port"),
