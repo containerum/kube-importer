@@ -39,27 +39,27 @@ spec:
               value: {{ $val | quote }}
             {{- end }}
 
-            {{- if .Values.env.local.CH_KUBE_IMPORTER_RESOURCE_URL }}
-            - name: CH_KUBE_IMPORTER_RESOURCE_URL
-              value: "{{ .Values.env.local.CH_KUBE_IMPORTER_RESOURCE_URL }}"
+            {{- if .Values.env.local.RESOURCE_URL }}
+            - name: RESOURCE_URL
+              value: "{{ .Values.env.local.RESOURCE_URL }}"
             {{- else }}
-            - name: CH_KUBE_IMPORTER_RESOURCE_URL
+            - name: RESOURCE_URL
               value: "http://{{ .Release.Name }}-resource:1213"
             {{- end }}
 
-            {{- if .Values.env.local.CH_KUBE_IMPORTER_PERMISSIONS_URL }}
-            - name: CH_KUBE_IMPORTER_PERMISSIONS_URL
-              value: "{{ .Values.env.local.CH_KUBE_IMPORTER_PERMISSIONS_URL }}"
+            {{- if .Values.env.local.PERMISSIONS_URL }}
+            - name: PERMISSIONS_URL
+              value: "{{ .Values.env.local.PERMISSIONS_URL }}"
             {{- else }}
-            - name: CH_KUBE_IMPORTER_PERMISSIONS_URL
+            - name: PERMISSIONS_URL
               value: "http://{{ .Release.Name }}-permissions:4242"
             {{- end }}
 
-            {{- if .Values.env.local.CH_KUBE_IMPORTER_VOLUMES_URL }}
-            - name: CH_KUBE_IMPORTER_VOLUMES_URL
-              value: "{{ .Values.env.local.CH_KUBE_IMPORTER_VOLUMES_URL }}"
+            {{- if .Values.env.local.VOLUMES_URL }}
+            - name: VOLUMES_URL
+              value: "{{ .Values.env.local.VOLUMES_URL }}"
             {{- else }}
-            - name: CH_KUBE_IMPORTER_VOLUMES_URL
+            - name: VOLUMES_URL
               value: "http://{{ .Release.Name }}-volume:4343"
             {{- end }}
 
