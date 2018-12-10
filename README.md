@@ -1,5 +1,5 @@
-# Kube-importer for Containerum Platform
-Kube-importer is a service that imports pre-existing Kubernetes objects to [Containerum Platform](https://github.com/containerum/containerum).
+# Kube-importer for Containerum
+Kube-importer is a service that imports pre-existing Kubernetes objects to [Containerum](https://github.com/containerum/containerum).
 
 ## Prerequisites
 * Kubernetes
