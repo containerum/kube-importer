@@ -1,5 +1,5 @@
-# Kube-importer for Containerum
-Kube-importer is a service that imports pre-existing Kubernetes objects to [Containerum](https://github.com/containerum/containerum).
+# Volume
+Volume component is a storage class manager for [Containerum](https://github.com/containerum/containerum).
 
 ## Prerequisites
 * Kubernetes
@@ -11,12 +11,12 @@ Kube-importer is a service that imports pre-existing Kubernetes objects to [Cont
 ```
   helm repo add containerum https://charts.containerum.io
   helm repo update
-  helm install containerum/kube-importer
+  helm install containerum/volume
 ```
 
 ## Contributions
-Please submit all contributions concerning Kube-importer component to this repository. Contributing guidelines are available [here](https://github.com/containerum/containerum/blob/master/CONTRIBUTING.md).
+Please submit all contributions concerning Volume component to this repository. Contributing guidelines are available [here](https://github.com/containerum/containerum/blob/master/CONTRIBUTING.md).
 
 ## License
-Kube-importer project is licensed under the terms of the Apache License Version 2.0. Please see LICENSE in this repository for more details.
+Volume project is licensed under the terms of the Apache License Version 2.0. Please see LICENSE in this repository for more details.
 
